@@ -1,6 +1,8 @@
 .vscode
 *.csproj
 *.sln
+*.meta
+
 Library
 obj
 Temp
