@@ -36,20 +36,20 @@ public class CameraController : MonoBehaviour {
 		Vector2 cameraToTarget  = Target.transform.position - transform.position;
 		Vector3 targetPosition = transform.position;
 		if (cameraToTarget.x > TargetDistance) {
-			targetPosition.x = targetPosition.x + TargetDistance;
+			targetPosition.x = targetPosition.x + (cameraToTarget.x - TargetDistance);
 			Debug.Log("Too right!");
 		} else if (cameraToTarget.x < -TargetDistance) {
-			targetPosition.x = targetPosition.x - TargetDistance;
+			targetPosition.x = targetPosition.x + (cameraToTarget.x + TargetDistance);
 			Debug.Log("Too left!");
 		}
 		if (cameraToTarget.y > TargetDistance) {
-			targetPosition.y = targetPosition.y + TargetDistance;
+			targetPosition.y = targetPosition.y + (cameraToTarget.y - TargetDistance);
 			Debug.Log("Too high!");
 		} else if (cameraToTarget.y < -TargetDistance) {
-			targetPosition.y = targetPosition.y - TargetDistance;
+			targetPosition.y = targetPosition.y + (cameraToTarget.y + TargetDistance);
 			Debug.Log("Too low!");
 		}
-		//transform.position = targetPosition;
-		transform.position = Vector3.Lerp(transform.position, targetPosition, Smoothing*Time.deltaTime);
+		transform.position = targetPosition;
+		// transform.position = Vector3.Lerp(transform.position, targetPosition, Smoothing*Time.deltaTime);
 	}
 }
