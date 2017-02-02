@@ -4,6 +4,8 @@
 /// Implements player control of tanks, as well as collision detection.
 /// </summary>
 public class ShipController : MonoBehaviour {
+
+    public float health = 100f;
     /// <summary>
     /// How fast to drive
     /// </summary>
