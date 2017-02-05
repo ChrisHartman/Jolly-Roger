@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< 6ff0357eb7daafdcebf7f7c1afa38d2a72a4c733
 guid: 3bcfa61b51ea7bb409fe2d1700b498e2
 folderAsset: yes
 timeCreated: 1486346807
+=======
+guid: 88fb27705917b492683696dfa2f7f476
+folderAsset: yes
+timeCreated: 1486247698
+>>>>>>> Made some towers
 licenseType: Free
 DefaultImporter:
   userData: 
