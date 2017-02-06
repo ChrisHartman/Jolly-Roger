@@ -21,6 +21,9 @@ public class ShipController : MonoBehaviour {
     /// </summary>
     private Rigidbody2D boatRb;
     public KeyCode ForwardKey, LeftKey, RightKey, BackKey;
+    public GameObject weapon;
+    private GameObject activeWeapon; 
+    public KeyCode FireKey = KeyCode.Space; 
 
     /// <summary>
     /// Current rotation of the tank (in degrees).
@@ -40,6 +43,7 @@ public class ShipController : MonoBehaviour {
             boatRb.AddForce(transform.up * ForwardForce * Time.fixedDeltaTime);
         }
         if (Input.GetKey(BackKey)) {
+            // this could maybe make the ship slow down? 
             //boatRb.AddForce(transform.up * -ForwardForce * Time.fixedDeltaTime);
         }
         if (Input.GetKey(LeftKey)) {
@@ -47,6 +51,27 @@ public class ShipController : MonoBehaviour {
         }
         if (Input.GetKey(RightKey)) {
             boatRb.AddTorque(-TurnTorque*Time.fixedDeltaTime);
+        }
+    }
+
+    internal void Update()
+    {
+        // I'm doing this input in Update so that the frame the key is pressed isn't missed 
+        if (Input.GetKeyDown(FireKey))
+        {
+            if (activeWeapon == null)
+            {
+                // create a new instance of our weapon 
+                activeWeapon = Instantiate(weapon, this.transform, false); 
+            }
+        }
+        if (Input.GetKeyUp(FireKey))
+        {
+            if (activeWeapon != null)
+            {
+                activeWeapon.GetComponent<AreaWeapon>().Activate();
+                activeWeapon = null; 
+            }
         }
     }
 
