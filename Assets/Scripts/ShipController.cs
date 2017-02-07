@@ -10,6 +10,8 @@ public class ShipController : MonoBehaviour {
     /// How fast to drive
     /// </summary>
     public float ForwardForce = 1f;
+    private float NormalForce;
+    public float ForceIncrease = 1f;
     //public float ForwardSpeed = 1f;
     /// <summary>
     /// How fast to turn
@@ -20,7 +22,7 @@ public class ShipController : MonoBehaviour {
     /// Keyboard controls for the player.
     /// </summary>
     private Rigidbody2D boatRb;
-    public KeyCode ForwardKey, LeftKey, RightKey, BackKey;
+    public KeyCode ForwardKey, LeftKey, RightKey, BackKey, SpeedUpKey;
     public GameObject weapon;
     private GameObject activeWeapon; 
     public KeyCode FireKey = KeyCode.Space; 
@@ -34,9 +36,16 @@ public class ShipController : MonoBehaviour {
 
     internal void Start() {
         boatRb = GetComponent<Rigidbody2D>();
+        NormalForce = ForwardForce;
+        
     }
     internal void FixedUpdate() {
         //transform.position += (transform.up * velocity * Time.deltaTime);
+        if (Input.GetKeyDown(SpeedUpKey)) {
+            ForwardForce = NormalForce + ForceIncrease;
+        } else if (Input.GetKeyUp(SpeedUpKey)) {
+            ForwardForce = NormalForce;
+        }
         var s_right = Vector2.Dot(boatRb.velocity, transform.right);
         boatRb.AddForce(-1f * s_right * transform.right);
         if(Input.GetKey(ForwardKey)) {
