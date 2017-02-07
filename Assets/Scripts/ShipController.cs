@@ -6,67 +6,70 @@ using System;
 /// Implements player control of tanks, as well as collision detection.
 /// </summary>
 public class ShipController : MonoBehaviour {
-
-    public float health = 100f;
     /// <summary>
-    /// How fast to drive
+    /// How hard to speed up with sail lowered
     /// </summary>
-    public float ForwardForce = 1f;
-    private float NormalForce;
+    public float DefaultForce = 30f;
+
+    public float MaxSlowSpeed = 1.6f;
+    public float MaxFastSpeed = 3.0f;
+    
+     /// <summary>
+    /// How much additional force the sail should provide
+    /// </summary>
     public float ForceIncrease = 1f;
 
-    private bool RaisedSail;
-    //public float ForwardSpeed = 1f;
     /// <summary>
-    /// How fast to turn
+    /// How hard to turn
     /// </summary>
     public float TurnTorque = 1f;
-
-
+    public float Smoothing = 5f;
     /// <summary>
     /// Keyboard controls for the player.
     /// </summary>
     public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey;
     public KeyCode FireKey = KeyCode.Space; 
     public GameObject weapon;
+    private bool RaisedSail;
+    private float ForwardForce;
+    private float MaxSpeed;
     private GameObject activeWeapon; 
     private Rigidbody2D boatRb;
-
     private CameraController cameraController;
-    /// <summary>
-    /// Current rotation of the tank (in degrees).
-    /// We need this because Unity's 2D system is built on top of its 3D system and so they don't
-    /// give you a method for finding the rotation that doesn't require you to know what a quaternion
-    /// is and what Euler angles are.  We haven't talked about those yet.
-    /// </summary>
+    
 
     internal void Start() {
+        MaxSpeed = MaxSlowSpeed;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
-        NormalForce = ForwardForce;
+        ForwardForce = DefaultForce;
         RaisedSail = false; 
     }
 
     public void RaiseSail() {
-        ForwardForce = NormalForce + ForceIncrease;
+        ForwardForce = DefaultForce + ForceIncrease;
         if (activeWeapon != null) {
                     activeWeapon.GetComponent<AreaWeapon>().Disable();
                     activeWeapon = null; 
         }
+        MaxSpeed = MaxFastSpeed;
         RaisedSail = true;
         cameraController.ZoomOut();
     }
 
     public void LowerSail() {
-        ForwardForce = NormalForce;
+        ForwardForce = DefaultForce;
         RaisedSail = false;
         cameraController.ZoomIn();
+        MaxSpeed = MaxSlowSpeed;
     }
 
     internal void FixedUpdate() {
-        //transform.position += (transform.up * velocity * Time.deltaTime);
+        // This keeps the boat from drifting around
         var s_right = Vector2.Dot(boatRb.velocity, transform.right);
         boatRb.AddForce(-1f * s_right * transform.right);
+
+        // Directional Controls
         if(Input.GetKey(ForwardKey) || Input.GetKey(AltForwardKey)) {
             boatRb.AddForce(transform.up * ForwardForce * Time.fixedDeltaTime);
         }
@@ -79,6 +82,11 @@ public class ShipController : MonoBehaviour {
         }
         if (Input.GetKey(RightKey) || Input.GetKey(AltRightKey)) {
             boatRb.AddTorque(-TurnTorque*Time.fixedDeltaTime);
+        }
+        Debug.Log("Speed: " + boatRb.velocity.magnitude + " Max: " + MaxSpeed);
+        if (boatRb.velocity.magnitude > MaxSpeed) {
+            Debug.Log("SLOWWWWW DOWWWWWNNNNNN");
+            boatRb.velocity = Vector3.Slerp(boatRb.velocity, boatRb.velocity.normalized * MaxSpeed, Time.fixedDeltaTime*Smoothing);
         }
     }
 
