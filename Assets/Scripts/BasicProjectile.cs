@@ -34,6 +34,6 @@ public class BasicProjectile : MonoBehaviour {
     {
         Creator = creator;
         transform.position = pos;
-        GetComponent<Rigidbody2D>().velocity = direction;
+        GetComponent<Rigidbody2D>().velocity = (direction / direction.magnitude) * Speed;
     }
 }
