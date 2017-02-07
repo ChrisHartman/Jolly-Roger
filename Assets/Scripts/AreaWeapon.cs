@@ -10,12 +10,13 @@ public class AreaWeapon : MonoBehaviour {
     // a list containing all applicable objects in the collider
     List<GameObject> targetedObj = new List<GameObject>();
 
-    virtual internal void Start() { }
+    virtual internal void Start() { Debug.Log("Starting!");}
     virtual internal void Update () { }
     
     // add objects to the targeted list when they enter the collider 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("Something happened!");
         if (!targetedObj.Contains(other.gameObject))
         {
             // TODO: Add a way of making sure the object is targetable
@@ -47,10 +48,16 @@ public class AreaWeapon : MonoBehaviour {
         Destroy(this.gameObject); 
     }
 
+    public void Disable() {
+        Destroy(this.gameObject);
+    }
+
     // Code that defines how an attack is carried out 
     private void Attack(GameObject other)
     {
         // TODO: decide how we want to do this 
         Debug.Log("Attacking " + other.name + " with " + this.gameObject.name); 
     }
+
+    
 }
