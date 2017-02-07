@@ -29,7 +29,7 @@ public class ShipController : MonoBehaviour {
     /// Keyboard controls for the player.
     /// </summary>
     private Rigidbody2D boatRb;
-    public KeyCode ForwardKey, LeftKey, RightKey, BackKey, SpeedUpKey;
+    public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey;
     public GameObject weapon;
     private GameObject activeWeapon; 
     public KeyCode FireKey = KeyCode.Space; 
@@ -66,17 +66,17 @@ public class ShipController : MonoBehaviour {
         //transform.position += (transform.up * velocity * Time.deltaTime);
         var s_right = Vector2.Dot(boatRb.velocity, transform.right);
         boatRb.AddForce(-1f * s_right * transform.right);
-        if(Input.GetKey(ForwardKey)) {
+        if(Input.GetKey(ForwardKey) || Input.GetKey(AltForwardKey)) {
             boatRb.AddForce(transform.up * ForwardForce * Time.fixedDeltaTime);
         }
-        if (Input.GetKey(BackKey)) {
+        if (Input.GetKey(BackKey) || Input.GetKey(AltBackKey)) {
             // this could maybe make the ship slow down? 
             //boatRb.AddForce(transform.up * -ForwardForce * Time.fixedDeltaTime);
         }
-        if (Input.GetKey(LeftKey)) {
+        if (Input.GetKey(LeftKey) || Input.GetKey(AltLeftKey)) {
             boatRb.AddTorque(TurnTorque*Time.fixedDeltaTime);
         }
-        if (Input.GetKey(RightKey)) {
+        if (Input.GetKey(RightKey) || Input.GetKey(AltRightKey)) {
             boatRb.AddTorque(-TurnTorque*Time.fixedDeltaTime);
         }
     }
