@@ -22,18 +22,17 @@ public class ShipController : MonoBehaviour {
     /// </summary>
     public float TurnTorque = 1f;
 
-    public event Action RaiseSail = delegate { };
-    public event Action LowerSail = delegate { };
 
     /// <summary>
     /// Keyboard controls for the player.
     /// </summary>
-    private Rigidbody2D boatRb;
     public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey;
+    public KeyCode FireKey = KeyCode.Space; 
     public GameObject weapon;
     private GameObject activeWeapon; 
-    public KeyCode FireKey = KeyCode.Space; 
+    private Rigidbody2D boatRb;
 
+    private CameraController cameraController;
     /// <summary>
     /// Current rotation of the tank (in degrees).
     /// We need this because Unity's 2D system is built on top of its 3D system and so they don't
@@ -43,25 +42,27 @@ public class ShipController : MonoBehaviour {
 
     internal void Start() {
         boatRb = GetComponent<Rigidbody2D>();
+        cameraController = FindObjectOfType<CameraController>();
         NormalForce = ForwardForce;
-        RaiseSail += SpeedUp;
-        LowerSail += SlowDown;
         RaisedSail = false; 
     }
 
-    public void SpeedUp() {
+    public void RaiseSail() {
         ForwardForce = NormalForce + ForceIncrease;
         if (activeWeapon != null) {
                     activeWeapon.GetComponent<AreaWeapon>().Disable();
                     activeWeapon = null; 
         }
         RaisedSail = true;
+        cameraController.ZoomOut();
     }
 
-    public void SlowDown() {
+    public void LowerSail() {
         ForwardForce = NormalForce;
         RaisedSail = false;
+        cameraController.ZoomIn();
     }
+
     internal void FixedUpdate() {
         //transform.position += (transform.up * velocity * Time.deltaTime);
         var s_right = Vector2.Dot(boatRb.velocity, transform.right);
