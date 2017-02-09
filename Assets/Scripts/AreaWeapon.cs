@@ -10,6 +10,8 @@ public class AreaWeapon : MonoBehaviour {
     // a list containing all applicable objects in the collider
     List<GameObject> targetedObj = new List<GameObject>();
 
+    public float power;
+
     virtual internal void Start() { }
     virtual internal void Update () { }
     
@@ -56,6 +58,9 @@ public class AreaWeapon : MonoBehaviour {
     {
         // TODO: decide how we want to do this 
         Debug.Log("Attacking " + other.name + " with " + this.gameObject.name); 
+        if (other.GetComponent<Health>() != null) {
+            other.GetComponent<Health>().Damage(power);
+        }
     }
 
     

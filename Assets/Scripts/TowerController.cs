@@ -13,7 +13,7 @@ public class TowerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		GetComponent<Health>().OnDeath += Die;
 	}
 
 	void FireProjectileIfPossible(){
@@ -45,5 +45,9 @@ public class TowerController : MonoBehaviour {
     internal void Update(){
 
 		FireProjectileIfPossible();
+    }
+
+    void Die() {
+        Destroy(this.gameObject);
     }
 }
