@@ -83,9 +83,7 @@ public class ShipController : MonoBehaviour {
         if (Input.GetKey(RightKey) || Input.GetKey(AltRightKey)) {
             boatRb.AddTorque(-TurnTorque*Time.fixedDeltaTime);
         }
-        Debug.Log("Speed: " + boatRb.velocity.magnitude + " Max: " + MaxSpeed);
         if (boatRb.velocity.magnitude > MaxSpeed) {
-            Debug.Log("SLOWWWWW DOWWWWWNNNNNN");
             boatRb.velocity = Vector3.Slerp(boatRb.velocity, boatRb.velocity.normalized * MaxSpeed, Time.fixedDeltaTime*Smoothing);
         }
     }
