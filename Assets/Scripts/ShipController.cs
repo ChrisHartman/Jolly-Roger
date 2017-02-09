@@ -39,6 +39,7 @@ public class ShipController : MonoBehaviour {
     
 
     internal void Start() {
+        GetComponent<Health>().OnDeath += Die;
         MaxSpeed = MaxSlowSpeed;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
@@ -88,6 +89,10 @@ public class ShipController : MonoBehaviour {
         }
     }
 
+    void Die() {
+        Destroy(this.gameObject);
+    }
+
     internal void Update()
     {
         if (Input.GetKeyDown(SpeedUpKey)) {
@@ -114,5 +119,15 @@ public class ShipController : MonoBehaviour {
                 }
             }
         }
+    }
+    /// <summary>
+    /// OnCollisionEnter is called when this collider/rigidbody has begun
+    /// touching another rigidbody/collider.
+    /// </summary>
+    /// <param name="other">The Collision data associated with this collision.</param>
+    internal void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("ouchie");
+        GetComponent<Health>().Damage(10f);
     }
 }
