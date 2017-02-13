@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerController : MonoBehaviour {
+public class BasicProjectileTowerController : MonoBehaviour {
 
 	public float FireCooldown = 3f;
 	    
@@ -37,9 +37,7 @@ public class TowerController : MonoBehaviour {
 
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<BasicProjectile>();
-
-        var up = ship.transform.position-transform.position; //Change direction
-		ps.Init(gameObject, transform.position, up);
+		ps.Init(gameObject, transform.position, ship.transform.position);
     }
 
     internal void Update(){

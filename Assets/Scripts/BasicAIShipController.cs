@@ -69,7 +69,7 @@ public class BasicAIShipController : MonoBehaviour {
 	void FireProjectile(Vector3 direction) {
 		coolDownTimer = Time.time + FireCooldown;
         var go = Instantiate(BasicProjectile) ;
-        var ps = go.GetComponent<BasicProjectile>();
+        var ps = go.GetComponent<ShipProjectile>();
 		ps.Init(gameObject, transform.position, direction, FireTime);
     }
 
