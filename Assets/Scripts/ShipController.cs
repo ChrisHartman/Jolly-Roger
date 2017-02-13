@@ -65,6 +65,7 @@ public class ShipController : MonoBehaviour {
         ForwardForce = DefaultForce;
         RaisedSail = false; 
         NormalDrag = boatRb.drag;
+        GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
     }
 
     public void RaiseSail() {

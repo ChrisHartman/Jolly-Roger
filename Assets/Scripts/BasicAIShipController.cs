@@ -13,7 +13,8 @@ public class BasicAIShipController : MonoBehaviour {
 	public float WaypointThreshold = 1f;
 	public float FireCooldown = 5f;
 	public float FireDistance = 3f;
-	public float FireTime = 1.5f;
+	public float SideFireTime = 1f;
+	public float FrontFireTime = 1.5f;
 	public Transform[] path;
 	public GameObject ship;
 	public GameObject BasicProjectile;
@@ -58,19 +59,19 @@ public class BasicAIShipController : MonoBehaviour {
 		{
 			if (Physics2D.Raycast(transform.position, transform.up, FireDistance, 1<<9))
 			{
-            	FireProjectile(transform.up);
+            	FireProjectile(transform.up,FrontFireTime);
         	} else if (Physics2D.Raycast(transform.position, transform.right, FireDistance, 1<<9)) {
-				FireProjectile(transform.right);
+				FireProjectile(transform.right, SideFireTime);
 			} else if (Physics2D.Raycast(transform.position, -transform.right, FireDistance, 1<<9)) {
-				FireProjectile(-transform.right);
+				FireProjectile(-transform.right, SideFireTime);
 			}
 		}
 	}
-	void FireProjectile(Vector3 direction) {
+	void FireProjectile(Vector3 direction, float airTime) {
 		coolDownTimer = Time.time + FireCooldown;
         var go = Instantiate(BasicProjectile) ;
-        var ps = go.GetComponent<BasicProjectile>();
-		ps.Init(gameObject, transform.position, direction, FireTime);
+        var ps = go.GetComponent<ShipProjectile>();
+		ps.Init(gameObject, transform.position, direction, airTime);
     }
 
 	bool WaypointBlocked(Transform waypoint) {

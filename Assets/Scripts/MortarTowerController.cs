@@ -2,28 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerController : MonoBehaviour {
+public class MortarTowerController : MonoBehaviour {
 
 	public float FireCooldown = 3f;
+    public float FireDistance = 5f;
 	    
 	private float coolDownTimer;
 
-    public GameObject BasicProjectile;
-	private GameObject ship;
+    public GameObject MortarProjectile;
+	//public GameObject ShipController;
 
 	// Use this for initialization
 	void Start () {
-        ship = FindObjectOfType<ShipController>().gameObject;
 		GetComponent<Health>().OnDeath += Die;
 	}
 
 	void FireProjectileIfPossible(){
 
-		if (ship == null) {
-            return;
-        }
+		var ship= GameObject.Find("Ship");
+
         float dist = Vector3.Distance(ship.transform.position,transform.position);
-        if (Time.time > coolDownTimer && dist < 5f) {
+        if (Time.time > coolDownTimer && dist < FireDistance) {
 
             FireProjectile();
             coolDownTimer = Time.time + FireCooldown;
@@ -35,15 +34,14 @@ public class TowerController : MonoBehaviour {
     /// </summary>
     void FireProjectile() {
 
-        var go = Instantiate(BasicProjectile) ;
-        var ps = go.GetComponent<BasicProjectile>();
-
-        var up = ship.transform.position-transform.position; //Change direction
-		ps.Init(gameObject, transform.position, up);
+        var go = Instantiate(MortarProjectile) ;
+        var ps = go.GetComponent<MortarProjectile>();
+		var ship= GameObject.Find("Ship");
+		ps.Init(gameObject, transform.position, ship.transform.position);
     }
 
     internal void Update(){
-
+        
 		FireProjectileIfPossible();
     }
 
