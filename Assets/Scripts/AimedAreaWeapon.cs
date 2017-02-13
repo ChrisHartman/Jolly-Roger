@@ -18,7 +18,10 @@ public class AimedAreaWeapon : AreaWeapon {
     // whether we're increasing (heading toward endPos) or decreasing (heading toward startingPos)
     private bool increasing = true;
     // how far we've gone 
-    private float distTraveled = 0; 
+    private float distTraveled = 0;
+
+    // switches between travelling in the y-axis and the x-axis
+    public bool yAxis = false;
 
     override internal void Start()
     {
@@ -27,7 +30,14 @@ public class AimedAreaWeapon : AreaWeapon {
 
         // get the original position of the collider 
         startingPos = transform.localPosition;
-        endPos = new Vector3(transform.localPosition.x + moveDistance, transform.localPosition.y); 
+        if (yAxis == false)
+        {
+            endPos = new Vector3(transform.localPosition.x + moveDistance, transform.localPosition.y);
+        }
+        else
+        {
+            endPos = new Vector3(transform.localPosition.x, transform.localPosition.y + moveDistance); 
+        }
     }
 
     override internal void Update()
