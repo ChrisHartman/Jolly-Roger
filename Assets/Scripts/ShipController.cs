@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -28,15 +29,21 @@ public class ShipController : MonoBehaviour {
     /// Keyboard controls for the player.
     /// </summary>
     public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey;
-    public KeyCode FireKey = KeyCode.Space; 
-    public GameObject weapon;
     private bool RaisedSail;
     private float ForwardForce;
     private float MaxSpeed;
-    private GameObject activeWeapon; 
     private Rigidbody2D boatRb;
     private CameraController cameraController;
-    
+
+    /// <summary>
+    /// Weapon controls and variables 
+    /// </summary>
+    public KeyCode FireKey = KeyCode.Space;
+    public KeyCode IncrementWeaponSelection = KeyCode.E;
+    public KeyCode DecrementWeaponSelection = KeyCode.Q;
+    public List<GameObject> weapons = new List<GameObject>();
+    private GameObject activeWeapon;
+    private int weaponIndex = 0;
 
     internal void Start() {
         GetComponent<Health>().OnDeath += Die;
@@ -107,7 +114,7 @@ public class ShipController : MonoBehaviour {
                     if (activeWeapon == null)
                     {
                         // create a new instance of our weapon 
-                        activeWeapon = Instantiate(weapon, this.transform, false); 
+                        activeWeapon = Instantiate(weapons[weaponIndex], this.transform, false); 
                     }
             }
             if (Input.GetKeyUp(FireKey))
@@ -118,6 +125,31 @@ public class ShipController : MonoBehaviour {
                     activeWeapon = null; 
                 }
             }
+        }
+        // change the selected weapon
+        if (Input.GetKeyDown(IncrementWeaponSelection))
+        {
+            weaponIndex++;
+            // wrap around if the player scrolls past the largest index
+            if (weaponIndex >= weapons.Count)
+            {
+                weaponIndex = 0;
+            }
+            // change weapon display
+            // TODO make this less horrible when i'm not tired  
+            GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name); 
+        }
+        else if (Input.GetKeyDown(DecrementWeaponSelection))
+        {
+            weaponIndex--;
+            // wrap around if player scrolls past zero
+            if (weaponIndex < 0)
+            {
+                weaponIndex = weapons.Count - 1; 
+            }
+            // change weapon display
+            // TODO make this less horrible when i'm not tired  
+            GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
     }
     /// <summary>

@@ -12,6 +12,10 @@ public class AreaWeapon : MonoBehaviour {
 
     public float power;
 
+    // colors to show whether the weapon is aiming at anything 
+    public Color baseCol;
+    public Color targetingCol; 
+
     virtual internal void Start() { }
     virtual internal void Update () { }
     
@@ -23,7 +27,8 @@ public class AreaWeapon : MonoBehaviour {
             // TODO: Add a way of making sure the object is targetable
             // best way is probably to check if it has a health component (when those exist)
             targetedObj.Add(other.gameObject);
-            Debug.Log(other.gameObject.name + " added to target list!"); 
+            Debug.Log(other.gameObject.name + " added to target list!");
+            gameObject.GetComponent<SpriteRenderer>().color = targetingCol; 
         }
     }
 
@@ -34,6 +39,11 @@ public class AreaWeapon : MonoBehaviour {
         {
             targetedObj.Remove(other.gameObject);
             Debug.Log(other.gameObject.name + " removed from target list."); 
+            // if there's nothing left to target, return to base color. 
+            if (targetedObj.Count == 0)
+            {
+                gameObject.GetComponent<SpriteRenderer>().color = baseCol; 
+            }
         }
     }
 
@@ -56,7 +66,6 @@ public class AreaWeapon : MonoBehaviour {
     // Code that defines how an attack is carried out 
     private void Attack(GameObject other)
     {
-        // TODO: decide how we want to do this 
         Debug.Log("Attacking " + other.name + " with " + this.gameObject.name); 
         if (other.GetComponent<Health>() != null) {
             other.GetComponent<Health>().Damage(power);
