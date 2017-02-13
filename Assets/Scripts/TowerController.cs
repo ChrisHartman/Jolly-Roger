@@ -9,17 +9,19 @@ public class TowerController : MonoBehaviour {
 	private float coolDownTimer;
 
     public GameObject BasicProjectile;
-	//public GameObject ShipController;
+	private GameObject ship;
 
 	// Use this for initialization
 	void Start () {
+        ship = FindObjectOfType<ShipController>().gameObject;
 		GetComponent<Health>().OnDeath += Die;
 	}
 
 	void FireProjectileIfPossible(){
 
-		var ship= GameObject.Find("Ship");
-
+		if (ship == null) {
+            return;
+        }
         float dist = Vector3.Distance(ship.transform.position,transform.position);
         if (Time.time > coolDownTimer && dist < 5f) {
 
@@ -35,8 +37,6 @@ public class TowerController : MonoBehaviour {
 
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<BasicProjectile>();
-
-		var ship= GameObject.Find("Ship");
 
         var up = ship.transform.position-transform.position; //Change direction
 		ps.Init(gameObject, transform.position, up);

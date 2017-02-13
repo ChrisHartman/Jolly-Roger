@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 	private Transform Target;
+	public GameObject Player;
 	public float Smoothing = 5f;
 	public float TargetDistance = 5f;
 
@@ -15,7 +16,7 @@ public class CameraController : MonoBehaviour {
 	void Start () {
         //camera.backgroundColor = Color.blue;
 
-        ShipController shipController = FindObjectOfType<ShipController>();
+        ShipController shipController = Player.GetComponent<ShipController>();
         Target = shipController.transform;
 				NormalZoom = Camera.main.orthographicSize;
 				TargetZoom = NormalZoom;
@@ -44,39 +45,31 @@ public class CameraController : MonoBehaviour {
 	}
 
 	void Update () {
-		Vector2 cameraToTarget  = Target.transform.position - transform.position;
-		Vector3 targetPosition = transform.position;
-		if (cameraToTarget.x > TargetDistance) {
-			targetPosition.x = targetPosition.x + (cameraToTarget.x - TargetDistance);
-			//Debug.Log("Too right!");
-		} else if (cameraToTarget.x < -TargetDistance) {
-			targetPosition.x = targetPosition.x + (cameraToTarget.x + TargetDistance);
-			//Debug.Log("Too left!");
-		}
-		if (cameraToTarget.y > TargetDistance) {
-			targetPosition.y = targetPosition.y + (cameraToTarget.y - TargetDistance);
-			//Debug.Log("Too high!");
-		} else if (cameraToTarget.y < -TargetDistance) {
-			targetPosition.y = targetPosition.y + (cameraToTarget.y + TargetDistance);
-			//Debug.Log("Too low!");
-		}
-		transform.position = targetPosition;
-		// transform.position = Vector3.Lerp(transform.position, targetPosition, Smoothing*Time.deltaTime);
-		if (TargetZoom != GetComponent<Camera>().orthographicSize) {
-			GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, TargetZoom, Smoothing*Time.deltaTime);
+		if (Target != null) {
+			Vector2 cameraToTarget  = Target.transform.position - transform.position;
+			Vector3 targetPosition = transform.position;
+			if (cameraToTarget.x > TargetDistance) {
+				targetPosition.x = targetPosition.x + (cameraToTarget.x - TargetDistance);
+			} else if (cameraToTarget.x < -TargetDistance) {
+				targetPosition.x = targetPosition.x + (cameraToTarget.x + TargetDistance);
+			}
+			if (cameraToTarget.y > TargetDistance) {
+				targetPosition.y = targetPosition.y + (cameraToTarget.y - TargetDistance);
+			} else if (cameraToTarget.y < -TargetDistance) {
+				targetPosition.y = targetPosition.y + (cameraToTarget.y + TargetDistance);
+			}
+			transform.position = targetPosition;
+			if (TargetZoom != GetComponent<Camera>().orthographicSize) {
+				GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, TargetZoom, Smoothing*Time.deltaTime);
+			}
 		}
 	}
 
     public void ZoomOut() {
-        //transform.position = new Vector3(transform.position.x, transform.position.y,-100);
 		TargetZoom = NormalZoom + ZoomDistance;	
-        //GetComponent<Camera>().orthographicSize = NormalZoom + ZoomDistance;
-        //Debug.Log("Zooming out!");
     }
 
 	public void ZoomIn() {
 		TargetZoom = NormalZoom;
-			//GetComponent<Camera>().orthographicSize = NormalZoom;
-			//Debug.Log("Zooming In!");
 	}
 }

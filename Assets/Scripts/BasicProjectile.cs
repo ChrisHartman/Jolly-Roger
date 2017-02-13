@@ -13,15 +13,21 @@ public class BasicProjectile : MonoBehaviour {
     /// </summary>
     public float Speed = .01f;
 
+    private float EndTime;
+
+
+    internal void Die() {
+        Destroy(gameObject);
+    }
     /// <summary>
     /// Do dammage if hitting player
     /// </summary>
     /// <param name="collision"></param>
     internal void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.GetComponent<ShipController>() != null)
+        if (collision.gameObject.GetComponent<ShipController>() != null || Time.time > EndTime)
         {
             Destroy(gameObject);
-        }
+        }        
     }
 
     /// <summary>
@@ -30,10 +36,11 @@ public class BasicProjectile : MonoBehaviour {
     /// <param name="creator">Who's shooting</param>
     /// <param name="pos">Where to place the projectile</param>
     /// <param name="direction">Direction to move in (unit vector)</param>
-    public void Init(GameObject creator, Vector3 pos, Vector3 direction)
+    public void Init(GameObject creator, Vector3 pos, Vector3 direction, float airTime = 15f)
     {
         Creator = creator;
         transform.position = pos;
         GetComponent<Rigidbody2D>().velocity = direction.normalized * Speed;
+        Invoke("Die", airTime);
     }
 }
