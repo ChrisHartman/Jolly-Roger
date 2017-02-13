@@ -5,7 +5,7 @@ using UnityEngine;
 public class fireTowerController : MonoBehaviour {
 
     public GameObject fireProjectile;
-	public float FireCooldown = .6f;
+	public float FireCooldown = .2f;
 
 	private float coolDownTimer;
 

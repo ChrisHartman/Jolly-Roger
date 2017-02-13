@@ -11,7 +11,7 @@ public class fireProjectile : MonoBehaviour {
     /// <summary>
     /// How fast to move
     /// </summary>
-    public float Speed = .01f;
+    public float Speed = 3f;
 
     private Vector3 InitialPos;
     private Vector3 Direction;
