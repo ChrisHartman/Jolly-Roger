@@ -56,6 +56,7 @@ public class ShipController : MonoBehaviour {
     private bool Incapacitated; 
 
     internal void Start() {
+        MaxSpeed = MaxSlowSpeed;
         GetComponent<Health>().OnDeath += Die;
         Incapacitated = false;
         MoveTime = 0;
