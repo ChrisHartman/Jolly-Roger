@@ -6,7 +6,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
 
 	public float FireCooldown = 3f;
 	    
-	private float coolDownTimer;
+	public float coolDownTimer = 0;
 
     public GameObject BasicProjectile;
 	private GameObject ship;
@@ -26,6 +26,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
         if (Time.time > coolDownTimer && dist < 5f) {
 
             FireProjectile();
+            //Debug.Log(FireCooldown);
             coolDownTimer = Time.time + FireCooldown;
         }
     }

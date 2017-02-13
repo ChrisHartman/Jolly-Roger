@@ -17,6 +17,7 @@ public class BasicProjectile : MonoBehaviour {
     private Vector3 InitialPos;
     private Vector3 Target;
     private Vector3 Direction;
+    private GameObject crosshair;
 
     private float EndTime;
 
@@ -31,7 +32,8 @@ public class BasicProjectile : MonoBehaviour {
     internal void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.GetComponent<ShipController>() != null || Time.time > EndTime)
         {
-            Destroy(bpCrosshair);
+            Debug.Log("Hit a thing!");
+            Destroy(crosshair);
             Destroy(gameObject);
         }        
     }
@@ -45,6 +47,7 @@ public class BasicProjectile : MonoBehaviour {
     public void Init(GameObject creator, Vector3 pos, Vector3 target)
     {
         Creator = creator;
+        InitialPos = pos;
         transform.position = pos;
         Target=target;
         Direction = target-pos;
@@ -57,15 +60,14 @@ public class BasicProjectile : MonoBehaviour {
         crossHairGO.transform.position=target;
 */
 
-        var go = Instantiate(bpCrosshair) ;
-        go.transform.position=target;
+        crosshair = Instantiate(bpCrosshair) ;
+        crosshair.transform.position=target;
     }
 
     internal void Update(){
 
-        if(Vector3.Distance(transform.position,InitialPos)<Vector3.Distance(Target,InitialPos)){
-
-            Destroy(bpCrosshair);
+        if(Vector3.Distance(transform.position,InitialPos)>Vector3.Distance(Target,InitialPos)){
+            Destroy(crosshair);
             Destroy(gameObject);
         }
     }

@@ -6,6 +6,7 @@ public class fireTowerController : MonoBehaviour {
 
     public GameObject fireProjectile;
 	public float FireCooldown = .2f;
+    public float FireDistance = 1.5f;
 
 	private float coolDownTimer;
 
@@ -34,7 +35,7 @@ public class fireTowerController : MonoBehaviour {
         var go = Instantiate(fireProjectile) ;
         var ps = go.GetComponent<fireProjectile>();
 		var ship= GameObject.Find("Ship");
-		ps.Init(gameObject, transform.position, ship.transform.position);
+		ps.Init(gameObject, transform.position, ship.transform.position, FireDistance);
     }
 
     internal void Update(){

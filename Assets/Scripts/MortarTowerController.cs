@@ -5,6 +5,7 @@ using UnityEngine;
 public class MortarTowerController : MonoBehaviour {
 
 	public float FireCooldown = 3f;
+    public float FireDistance = 5f;
 	    
 	private float coolDownTimer;
 
@@ -21,7 +22,7 @@ public class MortarTowerController : MonoBehaviour {
 		var ship= GameObject.Find("Ship");
 
         float dist = Vector3.Distance(ship.transform.position,transform.position);
-        if (Time.time > coolDownTimer && dist < 5f) {
+        if (Time.time > coolDownTimer && dist < FireDistance) {
 
             FireProjectile();
             coolDownTimer = Time.time + FireCooldown;
@@ -40,7 +41,7 @@ public class MortarTowerController : MonoBehaviour {
     }
 
     internal void Update(){
-
+        
 		FireProjectileIfPossible();
     }
 

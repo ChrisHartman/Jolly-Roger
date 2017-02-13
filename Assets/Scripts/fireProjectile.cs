@@ -12,6 +12,7 @@ public class fireProjectile : MonoBehaviour {
     /// How fast to move
     /// </summary>
     public float Speed = 3f;
+    private float distance;
 
     private Vector3 InitialPos;
     private Vector3 Direction;
@@ -20,9 +21,10 @@ public class fireProjectile : MonoBehaviour {
     /// Do dammage if hitting player
     /// </summary>
     /// <param name="collision"></param>
-    internal void OnCollisionEnter2D(Collision2D collision) {
+    internal void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.GetComponent<ShipController>() != null)
-        {
+        {  
+            collision.gameObject.GetComponent<Health>().Damage(.5f);
             Destroy(gameObject);
         }
     }
@@ -33,9 +35,10 @@ public class fireProjectile : MonoBehaviour {
     /// <param name="creator">Who's shooting</param>
     /// <param name="pos">Where to place the projectile</param>
     /// <param name="direction">Direction to move in (unit vector)</param>
-    public void Init(GameObject creator, Vector3 pos, Vector3 target)
+    public void Init(GameObject creator, Vector3 pos, Vector3 target, float d)
     {
         Creator = creator;
+        distance = d;
         transform.position = pos;
 		InitialPos=pos;
         Direction = target-pos;
@@ -44,7 +47,7 @@ public class fireProjectile : MonoBehaviour {
 
     internal void Update(){
 
-        if(Vector3.Distance(transform.position,InitialPos)>1.5f){
+        if(Vector3.Distance(transform.position,InitialPos)>distance){
 
             Destroy(gameObject);
         }
