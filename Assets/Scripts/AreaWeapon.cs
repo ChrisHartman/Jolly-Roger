@@ -22,7 +22,7 @@ public class AreaWeapon : MonoBehaviour {
     // add objects to the targeted list when they enter the collider 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!targetedObj.Contains(other.gameObject))
+        if (!targetedObj.Contains(other.gameObject) && other.gameObject.GetComponent<Health>())
         {
             // TODO: Add a way of making sure the object is targetable
             // best way is probably to check if it has a health component (when those exist)

@@ -12,8 +12,13 @@ public class ShipController : MonoBehaviour {
     /// </summary>
     public float DefaultForce = 30f;
 
+    public float IslandDamage = 5f;
     public float MaxSlowSpeed = 1.6f;
     public float MaxFastSpeed = 3.0f;
+    public float FastCollisionDamage = 5f;
+    public float SlowCollisionDamage = 10f;
+    public float SlowDrag = 70f;
+    private float NormalDrag;
     
      /// <summary>
     /// How much additional force the sail should provide
@@ -25,6 +30,9 @@ public class ShipController : MonoBehaviour {
     /// </summary>
     public float TurnTorque = 1f;
     public float Smoothing = 5f;
+    public float IncapacitatedTime = .5f;
+    public float IslandCollisionVelocityThreshold = .8f;
+    
     /// <summary>
     /// Keyboard controls for the player.
     /// </summary>
@@ -44,14 +52,20 @@ public class ShipController : MonoBehaviour {
     public List<GameObject> weapons = new List<GameObject>();
     private GameObject activeWeapon;
     private int weaponIndex = 0;
+    private float MoveTime;
+    private bool Incapacitated; 
 
     internal void Start() {
-        GetComponent<Health>().OnDeath += Die;
         MaxSpeed = MaxSlowSpeed;
+        GetComponent<Health>().OnDeath += Die;
+        Incapacitated = false;
+        MoveTime = 0;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
         ForwardForce = DefaultForce;
         RaisedSail = false; 
+        NormalDrag = boatRb.drag;
+        GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
     }
 
     public void RaiseSail() {
@@ -60,6 +74,7 @@ public class ShipController : MonoBehaviour {
                     activeWeapon.GetComponent<AreaWeapon>().Disable();
                     activeWeapon = null; 
         }
+
         MaxSpeed = MaxFastSpeed;
         RaisedSail = true;
         cameraController.ZoomOut();
@@ -69,7 +84,9 @@ public class ShipController : MonoBehaviour {
         ForwardForce = DefaultForce;
         RaisedSail = false;
         cameraController.ZoomIn();
-        MaxSpeed = MaxSlowSpeed;
+        if (!Incapacitated) {
+            MaxSpeed = MaxSlowSpeed;
+        }
     }
 
     internal void FixedUpdate() {
@@ -81,27 +98,67 @@ public class ShipController : MonoBehaviour {
         if(Input.GetKey(ForwardKey) || Input.GetKey(AltForwardKey)) {
             boatRb.AddForce(transform.up * ForwardForce * Time.fixedDeltaTime);
         }
-        if (Input.GetKey(BackKey) || Input.GetKey(AltBackKey)) {
-            // this could maybe make the ship slow down? 
-            //boatRb.AddForce(transform.up * -ForwardForce * Time.fixedDeltaTime);
-        }
         if (Input.GetKey(LeftKey) || Input.GetKey(AltLeftKey)) {
             boatRb.AddTorque(TurnTorque*Time.fixedDeltaTime);
         }
         if (Input.GetKey(RightKey) || Input.GetKey(AltRightKey)) {
             boatRb.AddTorque(-TurnTorque*Time.fixedDeltaTime);
         }
+
         if (boatRb.velocity.magnitude > MaxSpeed) {
             boatRb.velocity = Vector3.Slerp(boatRb.velocity, boatRb.velocity.normalized * MaxSpeed, Time.fixedDeltaTime*Smoothing);
         }
     }
 
     void Die() {
+        Debug.Log("Dying!");
         Destroy(this.gameObject);
+    }
+    
+    /// <summary>
+    /// Sent when an incoming collider makes contact with this object's
+    /// collider (2D physics only).
+    /// </summary>
+    /// <param name="other">The Collision2D data associated with this collision.</param>
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        // This isn't implemented great, but the goal is to make it hitting an Island
+        // hurt you, stop you, and allow you to leave
+        if (other.gameObject.tag == "Island") {
+            if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {
+                MaxSpeed = 0;
+                Incapacitated = true;
+                GetComponent<Health>().Damage(IslandDamage);
+                MoveTime = Time.time + IncapacitatedTime;
+                if (RaisedSail) LowerSail();
+            }
+        } else {
+            GetComponent<Health>().Damage(5f);
+        }
+
+        // float damage = SlowCollisionDamage;
+        // if (RaisedSail) {
+        //     damage = FastCollisionDamage;
+        // }
+        // GetComponent<Health>().Damage(damage);
     }
 
     internal void Update()
     {
+        if (Incapacitated) {
+            if (Time.time > MoveTime) {
+                Incapacitated = false;
+                MaxSpeed = MaxSlowSpeed;
+                if (RaisedSail) {
+                    MaxSpeed = MaxFastSpeed;
+                }
+            }
+        }
+        if (Input.GetKeyDown(BackKey) || Input.GetKeyDown(AltBackKey)) { 
+            boatRb.drag = SlowDrag;
+        } else if (Input.GetKeyUp(BackKey) || Input.GetKeyDown(AltBackKey)) {
+            boatRb.drag = NormalDrag;
+        }
         if (Input.GetKeyDown(SpeedUpKey)) {
             RaiseSail();
         } else if (!Input.GetKey(SpeedUpKey) && RaisedSail) {
@@ -109,6 +166,7 @@ public class ShipController : MonoBehaviour {
         }
         // I'm doing this input in Update so that the frame the key is pressed isn't missed 
         if (!RaisedSail) {
+
             if (Input.GetKeyDown(FireKey))
             {
                     if (activeWeapon == null)
@@ -152,14 +210,5 @@ public class ShipController : MonoBehaviour {
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
     }
-    /// <summary>
-    /// OnCollisionEnter is called when this collider/rigidbody has begun
-    /// touching another rigidbody/collider.
-    /// </summary>
-    /// <param name="other">The Collision data associated with this collision.</param>
-    internal void OnCollisionEnter(Collision other)
-    {
-        Debug.Log("ouchie");
-        GetComponent<Health>().Damage(10f);
-    }
+
 }
