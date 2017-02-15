@@ -182,7 +182,7 @@ public class ShipController : MonoBehaviour {
             {
                 if (activeWeapon != null)
                 {
-                    activeWeapon.GetComponent<AreaWeapon>().Activate();
+                    activeWeapon.GetComponent<WeaponGroup>().Activate();
                     activeWeapon = null; 
                 }
             }
