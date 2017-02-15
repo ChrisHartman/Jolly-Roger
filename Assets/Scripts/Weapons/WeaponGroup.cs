@@ -20,4 +20,14 @@ public class WeaponGroup : MonoBehaviour {
             Destroy(this.gameObject); 
         }
     }
+
+    public void Disable()
+    {
+        foreach(Transform weapon in transform)
+        {
+            weapon.GetComponent<AreaWeapon>().Disable();
+
+            Destroy(this.gameObject); 
+        }
+    }
 }
