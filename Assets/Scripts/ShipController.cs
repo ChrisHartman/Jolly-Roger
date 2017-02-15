@@ -113,6 +113,9 @@ public class ShipController : MonoBehaviour {
     void Die() {
         Debug.Log("Dying!");
         Destroy(this.gameObject);
+
+        Debug.Log("Returning to main menu...");
+        GameObject.Find("Level Manager").GetComponent<LevelManager>().LoadLevel("Main Menu"); 
     }
     
     /// <summary>
