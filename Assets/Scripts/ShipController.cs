@@ -111,10 +111,10 @@ public class ShipController : MonoBehaviour {
     }
 
     void Die() {
-        Debug.Log("Dying!");
+        //Debug.Log("Dying!");
         Destroy(this.gameObject);
 
-        Debug.Log("Returning to main menu...");
+        //Debug.Log("Returning to main menu...");
         GameObject.Find("Level Manager").GetComponent<LevelManager>().LoadLevel("Main Menu"); 
     }
     
@@ -135,7 +135,7 @@ public class ShipController : MonoBehaviour {
                 MoveTime = Time.time + IncapacitatedTime;
                 if (RaisedSail) LowerSail();
             }
-        } else {
+        } else if (other.gameObject.tag == "Projectile") {
             GetComponent<Health>().Damage(5f);
         }
 
