@@ -81,7 +81,7 @@ public class ShipController : MonoBehaviour {
     public void RaiseSail() {
         ForwardForce = DefaultForce + ForceIncrease;
         if (activeWeapon != null) {
-                    activeWeapon.GetComponent<AreaWeapon>().Disable();
+                    activeWeapon.GetComponent<WeaponGroup>().Disable();
                     activeWeapon = null; 
         }
 
@@ -192,7 +192,7 @@ public class ShipController : MonoBehaviour {
             {
                 if (activeWeapon != null)
                 {
-                    activeWeapon.GetComponent<AreaWeapon>().Activate();
+                    activeWeapon.GetComponent<WeaponGroup>().Activate();
                     activeWeapon = null; 
                 }
             }
