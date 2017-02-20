@@ -175,7 +175,7 @@ public class ShipController : MonoBehaviour {
         }
         if (Input.GetKeyDown(SpeedUpKey) || Input.GetKeyDown(AlternateSpeedUpKey)) {
             RaiseSail();
-        } else if (!(Input.GetKey(SpeedUpKey) ||   Input.GetKeyDown(AlternateSpeedUpKey)) && RaisedSail) {
+        } else if (!((Input.GetKey(SpeedUpKey) ||   Input.GetKey(AlternateSpeedUpKey))) && RaisedSail) {
             LowerSail();
         }
         // I'm doing this input in Update so that the frame the key is pressed isn't missed 
