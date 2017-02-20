@@ -36,7 +36,7 @@ public class ShipController : MonoBehaviour {
     /// <summary>
     /// Keyboard controls for the player.
     /// </summary>
-    public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey;
+    public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey, AlternateSpeedUpKey;
     private bool RaisedSail;
     private float ForwardForce;
     private float MaxSpeed;
@@ -49,12 +49,13 @@ public class ShipController : MonoBehaviour {
     public KeyCode FireKey = KeyCode.Space;
     public KeyCode IncrementWeaponSelection = KeyCode.E;
     public KeyCode DecrementWeaponSelection = KeyCode.Q;
+    public KeyCode AlternateIncrementWeaponSelection;
+    public KeyCode AlternateDecrementWeaponSelection;
     public List<GameObject> weapons = new List<GameObject>();
     private GameObject activeWeapon;
     private int weaponIndex = 0;
     private float MoveTime;
     private bool Incapacitated; 
-
 
     private float Gold;
     private float Fabric;
@@ -172,9 +173,9 @@ public class ShipController : MonoBehaviour {
         } else if (Input.GetKeyUp(BackKey) || Input.GetKeyDown(AltBackKey)) {
             boatRb.drag = NormalDrag;
         }
-        if (Input.GetKeyDown(SpeedUpKey)) {
+        if (Input.GetKeyDown(SpeedUpKey) || Input.GetKeyDown(AlternateSpeedUpKey)) {
             RaiseSail();
-        } else if (!Input.GetKey(SpeedUpKey) && RaisedSail) {
+        } else if (!(Input.GetKey(SpeedUpKey) ||   Input.GetKeyDown(AlternateSpeedUpKey)) && RaisedSail) {
             LowerSail();
         }
         // I'm doing this input in Update so that the frame the key is pressed isn't missed 
@@ -198,7 +199,7 @@ public class ShipController : MonoBehaviour {
             }
         }
         // change the selected weapon
-        if (Input.GetKeyDown(IncrementWeaponSelection))
+        if (Input.GetKeyDown(IncrementWeaponSelection) || Input.GetKeyDown(AlternateIncrementWeaponSelection))
         {
             weaponIndex++;
             // wrap around if the player scrolls past the largest index
@@ -210,7 +211,7 @@ public class ShipController : MonoBehaviour {
             // TODO make this less horrible when i'm not tired  
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name); 
         }
-        else if (Input.GetKeyDown(DecrementWeaponSelection))
+        else if (Input.GetKeyDown(DecrementWeaponSelection) || Input.GetKeyDown(AlternateDecrementWeaponSelection))
         {
             weaponIndex--;
             // wrap around if player scrolls past zero

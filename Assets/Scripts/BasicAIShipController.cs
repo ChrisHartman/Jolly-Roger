@@ -182,7 +182,7 @@ public class BasicAIShipController : MonoBehaviour {
 		}
 	}
 	void GetInAttackPosition(Transform target) {
-		if (!(Physics2D.Raycast(transform.position, transform.up, 2f, LayerMask.GetMask("Land","Player","Enemies")))) {
+		if (!(Physics2D.Raycast(transform.position, transform.up, 2f, LayerMask.GetMask("Land","Player")))) {
 			boatRb.AddForce(transform.up*ForwardForce*Time.deltaTime);
 		}
 		float angle = Vector2.Angle(transform.up, target.position - transform.position);

@@ -19,6 +19,6 @@ public class IslandController : MonoBehaviour {
 
 	void Die() {
 		
-		GetComponent<SpriteRenderer>.color= new Color(0f, 0f, 0f, 1f);
+		GetComponent<SpriteRenderer>().color= new Color32(60, 67, 119, 255);
     }
 }
