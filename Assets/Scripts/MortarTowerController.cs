@@ -6,6 +6,7 @@ public class MortarTowerController : MonoBehaviour {
 
 	public float FireCooldown = 3f;
     public float FireDistance = 5f;
+    public GameObject islandGO;
 	    
 	private float coolDownTimer;
 
@@ -46,6 +47,9 @@ public class MortarTowerController : MonoBehaviour {
     }
 
     void Die() {
+        GameObject.Find("Ship").GetComponent<ShipController>().giveGold(5);
+		GameObject.Find("Ship").GetComponent<ShipController>().giveMetal(5);
+        islandGO.GetComponent<Health>().Damage(1);
         Destroy(this.gameObject);
     }
 }

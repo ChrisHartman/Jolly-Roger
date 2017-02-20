@@ -14,7 +14,10 @@ public class AreaWeapon : MonoBehaviour {
 
     // colors to show whether the weapon is aiming at anything 
     public Color baseCol;
-    public Color targetingCol; 
+    public Color targetingCol;
+
+    // a prefab for the explosion that plays on damaging opponents 
+    public GameObject explosionPrefab;
 
     virtual internal void Start() { }
     virtual internal void Update () { }
@@ -24,8 +27,6 @@ public class AreaWeapon : MonoBehaviour {
     {
         if (!targetedObj.Contains(other.gameObject) && other.gameObject.GetComponent<Health>())
         {
-            // TODO: Add a way of making sure the object is targetable
-            // best way is probably to check if it has a health component (when those exist)
             targetedObj.Add(other.gameObject);
             Debug.Log(other.gameObject.name + " added to target list!");
             gameObject.GetComponent<SpriteRenderer>().color = targetingCol; 
@@ -48,7 +49,7 @@ public class AreaWeapon : MonoBehaviour {
     }
 
     // Have the weapon fire on all currently targeted game objects
-    public void Activate()
+    virtual public void Activate()
     {
         foreach(GameObject g in targetedObj)
         {
@@ -69,6 +70,10 @@ public class AreaWeapon : MonoBehaviour {
         Debug.Log("Attacking " + other.name + " with " + this.gameObject.name); 
         if (other.GetComponent<Health>() != null) {
             other.GetComponent<Health>().Damage(power);
+
+            // create a smaller explosion at the target site
+            GameObject e = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
+            e.transform.localScale = e.transform.localScale * 0.6f; 
         }
     }
 

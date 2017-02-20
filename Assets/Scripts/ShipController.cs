@@ -55,23 +55,33 @@ public class ShipController : MonoBehaviour {
     private float MoveTime;
     private bool Incapacitated; 
 
+
+    private float Gold;
+    private float Fabric;
+    private float Metal;
+    private float Wood;
+
     internal void Start() {
         MaxSpeed = MaxSlowSpeed;
         GetComponent<Health>().OnDeath += Die;
         Incapacitated = false;
-        MoveTime = 0;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
         ForwardForce = DefaultForce;
         RaisedSail = false; 
         NormalDrag = boatRb.drag;
         GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
+    
+        Gold = 0;
+        Fabric = 0;
+        Metal = 0;
+        Wood = 0;
     }
 
     public void RaiseSail() {
         ForwardForce = DefaultForce + ForceIncrease;
         if (activeWeapon != null) {
-                    activeWeapon.GetComponent<AreaWeapon>().Disable();
+                    activeWeapon.GetComponent<WeaponGroup>().Disable();
                     activeWeapon = null; 
         }
 
@@ -182,7 +192,7 @@ public class ShipController : MonoBehaviour {
             {
                 if (activeWeapon != null)
                 {
-                    activeWeapon.GetComponent<AreaWeapon>().Activate();
+                    activeWeapon.GetComponent<WeaponGroup>().Activate();
                     activeWeapon = null; 
                 }
             }
@@ -213,5 +223,45 @@ public class ShipController : MonoBehaviour {
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
     }
+
+    public void giveGold(float amount) {
+		
+		Gold += amount;
+	}
+
+    public float getGold() {
+		
+		return Gold;
+	}
+
+    public void giveMetal(float amount) {
+		
+		Metal += amount;
+	}
+
+    public float getMetal() {
+		
+		return Metal;
+	}
+
+    public void giveFabric(float amount) {
+		
+		Fabric += amount;
+	}
+
+    public float getFabric() {
+		
+		return Fabric;
+	}
+
+    public void giveWood(float amount) {
+		
+		Wood += amount;
+	}
+
+    public float getWood() {
+		
+		return Wood;
+	}
 
 }

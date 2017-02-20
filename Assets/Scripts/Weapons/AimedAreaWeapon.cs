@@ -67,4 +67,12 @@ public class AimedAreaWeapon : AreaWeapon {
 
         transform.localPosition = Vector3.Lerp(startingPos, endPos, distTraveled); 
     }
+
+    public override void Activate()
+    {
+        // create an explosion at the aimed area
+        Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);
+
+        base.Activate();
+    }
 }

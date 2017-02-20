@@ -215,7 +215,10 @@ public class BasicAIShipController : MonoBehaviour {
 	}
 	
 	void Die() {
-        //Debug.Log("Dying!");
-        Destroy(this.gameObject);
+    //Debug.Log("Dying!");
+		GameObject.Find("Ship").GetComponent<ShipController>().giveGold(5);
+		GameObject.Find("Ship").GetComponent<ShipController>().giveFabric(10);
+		GameObject.Find("Ship").GetComponent<ShipController>().giveWood(10);
+    Destroy(this.gameObject);
     }
 }
