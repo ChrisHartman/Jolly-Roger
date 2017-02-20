@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ResourcesDisplay : MonoBehaviour {
 
+    public string resourceName;
 
 	public void ChangeAmount(string resource, float amount)
     {

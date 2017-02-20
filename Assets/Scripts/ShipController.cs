@@ -57,8 +57,8 @@ public class ShipController : MonoBehaviour {
     private float MoveTime;
     private bool Incapacitated; 
 
-    public float Gold;
-    public float Fabric;
+    private float Gold;
+    private float Fabric;
     private float Metal;
     private float Wood;
 
@@ -228,20 +228,20 @@ public class ShipController : MonoBehaviour {
     public void giveGold(float amount) {
 		
 		Gold += amount;
-        GameObject.Find("Gold").GetComponent<ResourcesDisplay>().ChangeAmount("G",Gold);
+        GameObject.Find("Gold").GetComponent<ResourcesDisplay>().ChangeAmount(Gold);
 	}
 
     public void giveMetal(float amount) {
 		
 		Metal += amount;
-        GameObject.Find("Metal").GetComponent<ResourcesDisplay>().ChangeAmount("M",Metal);
+        GameObject.Find("Metal").GetComponent<ResourcesDisplay>().ChangeAmount(Metal);
 	}
 
     public void giveFabric(float amount) {
 		
 		Fabric += amount;
 
-        GameObject.Find("Fabric").GetComponent<ResourcesDisplay>().ChangeAmount("F",Fabric);
+        GameObject.Find("Fabric").GetComponent<ResourcesDisplay>().ChangeAmount(Fabric);
 	}
 
 
@@ -249,7 +249,7 @@ public class ShipController : MonoBehaviour {
 		
 		Wood += amount;
 
-        GameObject.Find("Wood").GetComponent<ResourcesDisplay>().ChangeAmount("W",Wood);
+        GameObject.Find("Wood").GetComponent<ResourcesDisplay>().ChangeAmount(Wood);
 	}
 
 }
