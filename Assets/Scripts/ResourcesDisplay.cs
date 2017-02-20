@@ -7,8 +7,8 @@ public class ResourcesDisplay : MonoBehaviour {
 
     public string resourceName;
 
-	public void ChangeAmount(string resource, float amount)
+	public void ChangeAmount(float amount)
     {
-        GetComponent<Text>().text = resource +": " + amount; 
+        GetComponent<Text>().text = resourceName +": " + amount; 
     }
 }
