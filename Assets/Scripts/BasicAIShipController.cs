@@ -17,6 +17,7 @@ public class BasicAIShipController : MonoBehaviour {
 	public float chaseStartThreshold = 6f;
 	public float chaseAbandonThreshold = 20f;
 	public float TargetDistance = 4f;
+	public float pscale = 2f;
 	private float pathUpdateTime;
 	private bool chasing;
 	public Waypoint[] path;
@@ -159,10 +160,11 @@ public class BasicAIShipController : MonoBehaviour {
 		coolDownTimer = Time.time + FireCooldown;
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<ShipProjectile>();
-		ps.Init(gameObject, transform.position, direction, airTime);
+		ps.Init(gameObject, transform.position, direction, new Vector3(pscale, pscale, 1), airTime);
     }
 
 	bool WaypointBlocked(Transform waypoint) {
+		Debug.Log(Waypoint.WaypointBlocked(waypoint.position, this.transform.position));
 		return Waypoint.WaypointBlocked(waypoint.position, this.transform.position);
 	} 
 

@@ -29,6 +29,7 @@ public class Waypoint : MonoBehaviour
     internal void Start()
     {
         if (Physics2D.OverlapCircle(transform.position, 1f, LayerMask.GetMask("Land"))) {
+            Debug.Log(this.gameObject.name);
             Destroy(this.gameObject);
         }
         var position = transform.position;
