@@ -43,7 +43,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
     }
 
     internal void Update(){
-
+        
 		FireProjectileIfPossible();
     }
 
