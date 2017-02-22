@@ -17,7 +17,7 @@ public class BasicAIShipController : MonoBehaviour {
 	public float chaseStartThreshold = 6f;
 	public float chaseAbandonThreshold = 20f;
 	public float TargetDistance = 4f;
-	public float pscale = 2f;
+	public float pscale = 3f;
 	private float pathUpdateTime;
 	private bool chasing;
 	public Waypoint[] path;
