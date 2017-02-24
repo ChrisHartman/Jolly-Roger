@@ -72,11 +72,6 @@ public class ShipController : MonoBehaviour {
         RaisedSail = false; 
         NormalDrag = boatRb.drag;
         GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
-    
-        Gold = 0;
-        Fabric = 0;
-        Metal = 0;
-        Wood = 0;
     }
 
     public void RaiseSail() {
@@ -125,8 +120,7 @@ public class ShipController : MonoBehaviour {
         //Debug.Log("Dying!");
         Destroy(this.gameObject);
 
-        //Debug.Log("Returning to main menu...");
-        GameObject.Find("Level Manager").GetComponent<LevelManager>().LoadLevel("Main Menu"); 
+        //Debug.Log("Returning to main menu...")
     }
     
     /// <summary>
@@ -224,32 +218,4 @@ public class ShipController : MonoBehaviour {
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
     }
-
-    public void giveGold(float amount) {
-		
-		Gold += amount;
-        GameObject.Find("Gold").GetComponent<ResourcesDisplay>().ChangeAmount(Gold);
-	}
-
-    public void giveMetal(float amount) {
-		
-		Metal += amount;
-        GameObject.Find("Metal").GetComponent<ResourcesDisplay>().ChangeAmount(Metal);
-	}
-
-    public void giveFabric(float amount) {
-		
-		Fabric += amount;
-
-        GameObject.Find("Fabric").GetComponent<ResourcesDisplay>().ChangeAmount(Fabric);
-	}
-
-
-    public void giveWood(float amount) {
-		
-		Wood += amount;
-
-        GameObject.Find("Wood").GetComponent<ResourcesDisplay>().ChangeAmount(Wood);
-	}
-
 }
