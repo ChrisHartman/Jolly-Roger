@@ -160,7 +160,7 @@ public class BasicAIShipController : MonoBehaviour {
 		coolDownTimer = Time.time + FireCooldown;
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<ShipProjectile>();
-		ps.Init(gameObject, transform.position, direction, new Vector3(pscale, pscale, 1), airTime);
+		ps.Init(transform.position, direction, new Vector3(pscale, pscale, 1), airTime);
     }
 
 	bool WaypointBlocked(Transform waypoint) {
