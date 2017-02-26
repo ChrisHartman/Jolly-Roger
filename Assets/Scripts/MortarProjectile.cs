@@ -12,7 +12,8 @@ public class MortarProjectile : MonoBehaviour {
 	
 
 	public float MortarSpeed = 3f;
-    public float explosionLength = .1f;
+    public float explosionLength = 1f;
+    public GameObject explosionPrefab;
 
     private Vector3 InitialPos;
     private Vector3 Target;
@@ -52,6 +53,9 @@ public class MortarProjectile : MonoBehaviour {
         //Debug.Log(GetComponent<SpriteRenderer>().color.a);
 		if(Time.time > explosionTime && !exploding){
             GetComponent<PointEffector2D>().enabled = true;
+            GameObject e = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            e.transform.localScale = e.transform.localScale * 1.25f; 
+            
             exploding = true;
             foreach (Health health in targetedHealth) {
                 health.Damage(10f);

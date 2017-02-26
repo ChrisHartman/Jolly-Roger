@@ -37,7 +37,7 @@ public class Health : MonoBehaviour {
 		Debug.Log("Ouch, health now at " + HealthRemaining);
 		OnHit();
 		if (HealthRemaining <= 0) {
-			Debug.Log("oh no!");
+			// Debug.Log("oh no!");
 			OnDeath();
 		}
 	}
