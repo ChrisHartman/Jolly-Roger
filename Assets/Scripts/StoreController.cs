@@ -10,10 +10,10 @@ public class StoreController : MonoBehaviour {
 	private Text resourceDisplay;
 	void Start () {
 		PlayerPrefs.DeleteAll();
-		PlayerPrefs.SetInt("Gold", 10);
-		PlayerPrefs.SetInt("Metal", 10);
-		PlayerPrefs.SetInt("Fabric", 10);
-		PlayerPrefs.SetInt("Wood", 10);
+		PlayerPrefs.SetInt("Gold", 30);
+		PlayerPrefs.SetInt("Metal", 30);
+		PlayerPrefs.SetInt("Fabric", 30);
+		PlayerPrefs.SetInt("Wood", 30);
 		resourceDisplay = GameObject.Find("Resource Display").GetComponent<Text>();
 		UpdateDisplay();
 		List<UpgradeController> upgrades = FindObjectOfType<UpgradeManager>().getAllAvailableUpgrades();

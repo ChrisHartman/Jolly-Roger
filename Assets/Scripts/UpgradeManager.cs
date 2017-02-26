@@ -11,6 +11,7 @@ public class UpgradeManager : MonoBehaviour {
 	public void ApplyUpgrades() {
 		foreach (UpgradeController upgrade in upgrades) {
 			for (int i = 1; i <= upgrade.NumberOfUpgrades; i++) {
+				Debug.Log(PlayerPrefs.GetInt(upgrade.UpgradeName + i) + upgrade.UpgradeName);
 				if (PlayerPrefs.GetInt(upgrade.UpgradeName + i) == 1) {
 					upgrade.ApplyUpgrade();
 				} else {

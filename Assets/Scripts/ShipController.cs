@@ -65,6 +65,7 @@ public class ShipController : MonoBehaviour {
     internal void Start() {
         MaxSpeed = MaxSlowSpeed;
         GetComponent<Health>().OnDeath += Die;
+        GetComponent<Health>().OnHit += GetComponent<AudioSource>().Play;
         Incapacitated = false;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
@@ -132,15 +133,7 @@ public class ShipController : MonoBehaviour {
     {
         // This isn't implemented great, but the goal is to make it hitting an Island
         // hurt you, stop you, and allow you to leave
-        if (other.gameObject.tag == "Island") {
-            if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {
-                MaxSpeed = 0;
-                Incapacitated = true;
-                GetComponent<Health>().Damage(IslandDamage);
-                MoveTime = Time.time + IncapacitatedTime;
-                if (RaisedSail) LowerSail();
-            }
-        } else if (other.gameObject.tag == "Projectile") {
+        if (other.gameObject.tag == "Projectile") {
             GetComponent<Health>().Damage(5f);
         }
 
@@ -149,6 +142,16 @@ public class ShipController : MonoBehaviour {
         //     damage = FastCollisionDamage;
         // }
         // GetComponent<Health>().Damage(damage);
+    }
+
+    public void Crash(Collision2D other) {
+         if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {          
+            MaxSpeed = 0;
+            Incapacitated = true;
+            GetComponent<Health>().Damage(IslandDamage);
+            MoveTime = Time.time + IncapacitatedTime;
+            if (RaisedSail) LowerSail();
+         }
     }
 
     internal void Update()
