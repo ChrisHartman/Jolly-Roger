@@ -165,11 +165,12 @@ public class BasicAIShipController : MonoBehaviour {
 		coolDownTimer = Time.time + FireCooldown;
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<ShipProjectile>();
+		GetComponent<AudioSource>().Play();
 		ps.Init(transform.position, direction, new Vector3(pscale, pscale, 1), airTime);
     }
 
 	bool WaypointBlocked(Transform waypoint) {
-		Debug.Log(Waypoint.WaypointBlocked(waypoint.position, this.transform.position));
+		// Debug.Log(Waypoint.WaypointBlocked(waypoint.position, this.transform.position));
 		return Waypoint.WaypointBlocked(waypoint.position, this.transform.position);
 	} 
 

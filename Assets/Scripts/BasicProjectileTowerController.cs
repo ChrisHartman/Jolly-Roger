@@ -39,6 +39,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
 
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<BasicProjectile>();
+        GetComponent<AudioSource>().Play();
 		ps.Init(gameObject, transform.position, ship.transform.position);
     }
 

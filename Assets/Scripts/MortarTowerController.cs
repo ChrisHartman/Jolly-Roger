@@ -38,6 +38,7 @@ public class MortarTowerController : MonoBehaviour {
         var go = Instantiate(MortarProjectile) ;
         var ps = go.GetComponent<MortarProjectile>();
 		var ship= GameObject.Find("Ship");
+        GetComponent<AudioSource>().Play();
 		ps.Init(gameObject, transform.position, ship.transform.position);
     }
 
