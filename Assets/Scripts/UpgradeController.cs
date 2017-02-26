@@ -28,6 +28,7 @@ public abstract class UpgradeController : MonoBehaviour {
 				PlayerPrefs.SetInt(UpgradeName + i, 1);
 				break;
 			}
+			
 		}
 		PlayerPrefs.SetInt("Gold", PlayerPrefs.GetInt("Gold") - GoldCost);
 		PlayerPrefs.SetInt("Metal", PlayerPrefs.GetInt("Metal") - MetalCost);

@@ -17,6 +17,19 @@ public class IslandController : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Sent when an incoming collider makes contact with this object's
+	/// collider (2D physics only).
+	/// </summary>
+	/// <param name="other">The Collision2D data associated with this collision.</param>
+	void OnCollisionEnter2D(Collision2D other)
+	{
+		Debug.Log(other.gameObject.name);
+		if (other.gameObject.GetComponent<ShipController>()) {
+			other.gameObject.GetComponent<ShipController>().Crash(other);
+		}
+	}
+
 	void Die() {
 		
 		foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>()) {
