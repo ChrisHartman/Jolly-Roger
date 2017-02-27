@@ -65,6 +65,7 @@ public class ShipController : MonoBehaviour {
     internal void Start() {
         MaxSpeed = MaxSlowSpeed;
         GetComponent<Health>().OnDeath += Die;
+        GetComponent<Health>().OnHit += GetComponent<AudioSource>().Play;
         Incapacitated = false;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
@@ -72,11 +73,6 @@ public class ShipController : MonoBehaviour {
         RaisedSail = false; 
         NormalDrag = boatRb.drag;
         GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
-    
-        Gold = 0;
-        Fabric = 0;
-        Metal = 0;
-        Wood = 0;
     }
 
     public void RaiseSail() {
@@ -125,8 +121,7 @@ public class ShipController : MonoBehaviour {
         //Debug.Log("Dying!");
         Destroy(this.gameObject);
 
-        //Debug.Log("Returning to main menu...");
-        GameObject.Find("Level Manager").GetComponent<LevelManager>().LoadLevel("Main Menu"); 
+        //Debug.Log("Returning to main menu...")
     }
     
     /// <summary>
@@ -138,15 +133,7 @@ public class ShipController : MonoBehaviour {
     {
         // This isn't implemented great, but the goal is to make it hitting an Island
         // hurt you, stop you, and allow you to leave
-        if (other.gameObject.tag == "Island") {
-            if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {
-                MaxSpeed = 0;
-                Incapacitated = true;
-                GetComponent<Health>().Damage(IslandDamage);
-                MoveTime = Time.time + IncapacitatedTime;
-                if (RaisedSail) LowerSail();
-            }
-        } else if (other.gameObject.tag == "Projectile") {
+        if (other.gameObject.tag == "Projectile") {
             GetComponent<Health>().Damage(5f);
         }
 
@@ -155,6 +142,16 @@ public class ShipController : MonoBehaviour {
         //     damage = FastCollisionDamage;
         // }
         // GetComponent<Health>().Damage(damage);
+    }
+
+    public void Crash(Collision2D other) {
+         if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {          
+            MaxSpeed = 0;
+            Incapacitated = true;
+            GetComponent<Health>().Damage(IslandDamage);
+            MoveTime = Time.time + IncapacitatedTime;
+            if (RaisedSail) LowerSail();
+         }
     }
 
     internal void Update()
@@ -224,32 +221,4 @@ public class ShipController : MonoBehaviour {
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
     }
-
-    public void giveGold(float amount) {
-		
-		Gold += amount;
-        GameObject.Find("Gold").GetComponent<ResourcesDisplay>().ChangeAmount(Gold);
-	}
-
-    public void giveMetal(float amount) {
-		
-		Metal += amount;
-        GameObject.Find("Metal").GetComponent<ResourcesDisplay>().ChangeAmount(Metal);
-	}
-
-    public void giveFabric(float amount) {
-		
-		Fabric += amount;
-
-        GameObject.Find("Fabric").GetComponent<ResourcesDisplay>().ChangeAmount(Fabric);
-	}
-
-
-    public void giveWood(float amount) {
-		
-		Wood += amount;
-
-        GameObject.Find("Wood").GetComponent<ResourcesDisplay>().ChangeAmount(Wood);
-	}
-
 }

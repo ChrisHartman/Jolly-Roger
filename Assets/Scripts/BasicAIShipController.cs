@@ -18,6 +18,11 @@ public class BasicAIShipController : MonoBehaviour {
 	public float chaseAbandonThreshold = 20f;
 	public float TargetDistance = 4f;
 	public float pscale = 3f;
+
+	public float Gold = 5;
+    public float Fabric = 5;
+    public float Metal = 5;
+    public float Wood = 5;
 	private float pathUpdateTime;
 	private bool chasing;
 	public Waypoint[] path;
@@ -160,11 +165,12 @@ public class BasicAIShipController : MonoBehaviour {
 		coolDownTimer = Time.time + FireCooldown;
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<ShipProjectile>();
+		GetComponent<AudioSource>().Play();
 		ps.Init(transform.position, direction, new Vector3(pscale, pscale, 1), airTime);
     }
 
 	bool WaypointBlocked(Transform waypoint) {
-		Debug.Log(Waypoint.WaypointBlocked(waypoint.position, this.transform.position));
+		// Debug.Log(Waypoint.WaypointBlocked(waypoint.position, this.transform.position));
 		return Waypoint.WaypointBlocked(waypoint.position, this.transform.position);
 	} 
 
@@ -218,9 +224,6 @@ public class BasicAIShipController : MonoBehaviour {
 	
 	void Die() {
     //Debug.Log("Dying!");
-		GameObject.Find("Ship").GetComponent<ShipController>().giveGold(5);
-		GameObject.Find("Ship").GetComponent<ShipController>().giveFabric(10);
-		GameObject.Find("Ship").GetComponent<ShipController>().giveWood(10);
-    Destroy(this.gameObject);
+    	Destroy(this.gameObject);
     }
 }

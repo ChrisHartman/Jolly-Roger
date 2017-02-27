@@ -10,7 +10,6 @@ public class BasicProjectileTowerController : MonoBehaviour {
 
     public GameObject BasicProjectile;
 	private GameObject ship;
-    public GameObject islandGO;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +38,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
 
         var go = Instantiate(BasicProjectile) ;
         var ps = go.GetComponent<BasicProjectile>();
+        GetComponent<AudioSource>().Play();
 		ps.Init(gameObject, transform.position, ship.transform.position);
     }
 
@@ -48,9 +48,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
     }
 
     void Die() {
-        GameObject.Find("Ship").GetComponent<ShipController>().giveGold(5);
-		GameObject.Find("Ship").GetComponent<ShipController>().giveMetal(5);
-        islandGO.GetComponent<Health>().Damage(1);
+        Debug.Log("Tower is dying!");
         Destroy(this.gameObject);
     }
 }
