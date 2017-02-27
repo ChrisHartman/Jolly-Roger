@@ -8,7 +8,7 @@ public class WeaponGroup : MonoBehaviour {
     /// Contains multiple weapons that are intended to fire simultaneously
     /// </summary>
 
-    public float cooldown = 5f; 
+    public float cooldown = 1f; 
 
     public void Activate()
     {
