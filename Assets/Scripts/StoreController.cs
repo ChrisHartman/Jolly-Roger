@@ -9,11 +9,11 @@ public class StoreController : MonoBehaviour {
 	Hashtable ButtonsToUpgrades = new Hashtable();
 	private Text resourceDisplay;
 	void Start () {
-		PlayerPrefs.DeleteAll();
-		PlayerPrefs.SetInt("Gold", 30);
-		PlayerPrefs.SetInt("Metal", 30);
-		PlayerPrefs.SetInt("Fabric", 30);
-		PlayerPrefs.SetInt("Wood", 30);
+		//PlayerPrefs.DeleteAll();
+		//PlayerPrefs.SetInt("Gold", 30);
+		//PlayerPrefs.SetInt("Metal", 30);
+		//PlayerPrefs.SetInt("Fabric", 30);
+		//PlayerPrefs.SetInt("Wood", 30);
 		resourceDisplay = GameObject.Find("Resource Display").GetComponent<Text>();
 		UpdateDisplay();
 		List<UpgradeController> upgrades = FindObjectOfType<UpgradeManager>().getAllAvailableUpgrades();
