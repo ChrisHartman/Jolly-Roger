@@ -18,9 +18,6 @@ public class RamUpgrade : UpgradeController {
 		
 	}
 	override public void ApplyUpgrade() {
-		RamController ram = FindObjectOfType<RamController>();
-		Debug.Log("Ram time!");
-		ram.gameObject.SetActive(true);
 	}
 	
 	// Update is called once per frame

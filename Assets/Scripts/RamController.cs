@@ -8,7 +8,9 @@ public class RamController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		if ((PlayerPrefs.GetInt("Get Ram1") != 1)) {
+			gameObject.SetActive(false);
+		}
 	}
 
 	/// <summary>

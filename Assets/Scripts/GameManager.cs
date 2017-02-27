@@ -9,10 +9,8 @@ public class GameManager : MonoBehaviour {
 	public event Action OnWin = delegate {};
 	public event Action OnLose = delegate {};
 	// Use this for initialization
-	void Awake()  {
-		FindObjectOfType<UpgradeManager>().ApplyUpgrades();
-	}
 	void Start () {
+		FindObjectOfType<UpgradeManager>().ApplyUpgrades();
 		FindObjectOfType<ShipController>().GetComponent<Health>().OnDeath += Lose;
 	}
 	
