@@ -13,7 +13,7 @@ public class Health : MonoBehaviour {
 	public event Action OnDeath = delegate {};
 
 	
-	private float HealthRemaining;
+	public float HealthRemaining;
 
 
 	// Use this for initialization
@@ -22,6 +22,11 @@ public class Health : MonoBehaviour {
 		if (healthBarSlider != null) { // this might be a textbook example of how not to do this...
 			healthBarSlider.value = 1f;
 		}
+	}
+
+	public void HealthOverride(float h) {
+		InitialHealth = h;
+		HealthRemaining = h;
 	}
 	
 	// Update is called once per frame

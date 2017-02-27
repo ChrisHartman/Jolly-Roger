@@ -10,7 +10,6 @@ public class BasicProjectileTowerController : MonoBehaviour {
 
     public GameObject BasicProjectile;
 	private GameObject ship;
-    public GameObject islandGO;
 
 	// Use this for initialization
 	void Start () {
@@ -49,7 +48,7 @@ public class BasicProjectileTowerController : MonoBehaviour {
     }
 
     void Die() {
-        islandGO.GetComponent<Health>().Damage(1);
+        Debug.Log("Tower is dying!");
         Destroy(this.gameObject);
     }
 }

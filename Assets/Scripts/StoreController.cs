@@ -9,11 +9,6 @@ public class StoreController : MonoBehaviour {
 	Hashtable ButtonsToUpgrades = new Hashtable();
 	private Text resourceDisplay;
 	void Start () {
-		//PlayerPrefs.DeleteAll();
-		//PlayerPrefs.SetInt("Gold", 30);
-		//PlayerPrefs.SetInt("Metal", 30);
-		//PlayerPrefs.SetInt("Fabric", 30);
-		//PlayerPrefs.SetInt("Wood", 30);
 		resourceDisplay = GameObject.Find("Resource Display").GetComponent<Text>();
 		UpdateDisplay();
 		List<UpgradeController> upgrades = FindObjectOfType<UpgradeManager>().getAllAvailableUpgrades();
@@ -71,6 +66,13 @@ public class StoreController : MonoBehaviour {
 		foreach (Button button in UnafordableButtons) {
 			ButtonsToUpgrades.Remove(button);
 		}
+	}
+	public void DeleteEverything() {
+		PlayerPrefs.DeleteAll();
+		PlayerPrefs.SetInt("Gold", 5);
+		PlayerPrefs.SetInt("Metal", 5);
+		PlayerPrefs.SetInt("Fabric", 5);
+		PlayerPrefs.SetInt("Wood", 5);
 	}
 	
 	// Update is called once per frame

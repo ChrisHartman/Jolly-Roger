@@ -7,7 +7,6 @@ public class fireTowerController : MonoBehaviour {
     public GameObject fireProjectile;
 	public float FireCooldown = .2f;
     public float FireDistance = 1.5f;
-    public GameObject islandGO;
 
 	private float coolDownTimer;
 
@@ -46,6 +45,5 @@ public class fireTowerController : MonoBehaviour {
 
     void Die() {
         Destroy(this.gameObject);
-        islandGO.GetComponent<Health>().Damage(1);
     }
 }
