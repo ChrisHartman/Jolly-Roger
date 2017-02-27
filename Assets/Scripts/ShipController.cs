@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 
 /// <summary>
 /// Implements player control of tanks, as well as collision detection.
@@ -47,15 +47,22 @@ public class ShipController : MonoBehaviour {
     /// Weapon controls and variables 
     /// </summary>
     public KeyCode FireKey = KeyCode.Space;
+    /*
     public KeyCode IncrementWeaponSelection = KeyCode.E;
     public KeyCode DecrementWeaponSelection = KeyCode.Q;
     public KeyCode AlternateIncrementWeaponSelection;
     public KeyCode AlternateDecrementWeaponSelection;
+    */
+    public KeyCode Hotkey1 = KeyCode.J;
+    public KeyCode Hotkey2 = KeyCode.K;
+    public KeyCode Hotkey3 = KeyCode.L;
+    private Image weaponIcon1, weaponIcon2, weaponIcon3; 
     public List<GameObject> weapons = new List<GameObject>();
     private GameObject activeWeapon;
     private int weaponIndex = 0;
     private float MoveTime;
-    private bool Incapacitated; 
+    private bool Incapacitated;
+    private List<float> cooldownTimers = new List<float>();
 
     private float Gold;
     private float Fabric;
@@ -71,12 +78,19 @@ public class ShipController : MonoBehaviour {
         ForwardForce = DefaultForce;
         RaisedSail = false; 
         NormalDrag = boatRb.drag;
-        GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
     
         Gold = 0;
         Fabric = 0;
         Metal = 0;
         Wood = 0;
+
+        for (int i = 0; i < weapons.Count; i++)
+        {
+            cooldownTimers.Add(0f); 
+        }
+        weaponIcon1 = GameObject.Find("Weapon Icon 1").GetComponent<Image>();
+        weaponIcon2 = GameObject.Find("Weapon Icon 2").GetComponent<Image>();
+        weaponIcon3 = GameObject.Find("Weapon Icon 3").GetComponent<Image>(); 
     }
 
     public void RaiseSail() {
@@ -159,6 +173,18 @@ public class ShipController : MonoBehaviour {
 
     internal void Update()
     {
+        // tick down cooldown timers
+        for (int i = 0; i < cooldownTimers.Count; i++)
+        {
+            cooldownTimers[i] -= Time.deltaTime;
+        }
+
+        // change weapon icon colors to reflect cooldowns 
+        // TODO: do this any other way jesus christ 
+        weaponIcon1.color = Color.Lerp(Color.white, Color.black, cooldownTimers[0] / weapons[0].GetComponent<WeaponGroup>().cooldown);
+        weaponIcon2.color = Color.Lerp(Color.white, Color.black, cooldownTimers[1] / weapons[1].GetComponent<WeaponGroup>().cooldown);
+        weaponIcon3.color = Color.Lerp(Color.white, Color.black, cooldownTimers[2] / weapons[2].GetComponent<WeaponGroup>().cooldown); 
+
         if (Incapacitated) {
             if (Time.time > MoveTime) {
                 Incapacitated = false;
@@ -181,6 +207,8 @@ public class ShipController : MonoBehaviour {
         // I'm doing this input in Update so that the frame the key is pressed isn't missed 
         if (!RaisedSail) {
 
+            // Weapons no longer based around usage of fire key
+            /*
             if (Input.GetKeyDown(FireKey))
             {
                     if (activeWeapon == null)
@@ -197,7 +225,39 @@ public class ShipController : MonoBehaviour {
                     activeWeapon = null; 
                 }
             }
+            */
+
+            // TODO put the weapon codes into an enum, i just didn't because i'm lazy 
+            // Instead, player controls weapons using individual keys
+            // Firing Mortars NUM == 0
+            if (Input.GetKeyDown(Hotkey1))
+            {
+                ActivateWeapon(0); 
+            }
+            if (Input.GetKeyUp(Hotkey1))
+            {
+                DeactivateWeapon(0); 
+            }
+            // Firing Cannons NUM == 1
+            if (Input.GetKeyDown(Hotkey2))
+            {
+                ActivateWeapon(1); 
+            }
+            if (Input.GetKeyUp(Hotkey2))
+            {
+                DeactivateWeapon(1); 
+            }
+            // Dropping Fire Barrel NUM == 2
+            if (Input.GetKeyDown(Hotkey3))
+            {
+                ActivateWeapon(2); 
+            }
+            if (Input.GetKeyUp(Hotkey3))
+            {
+                DeactivateWeapon(2); 
+            }
         }
+        /*
         // change the selected weapon
         if (Input.GetKeyDown(IncrementWeaponSelection) || Input.GetKeyDown(AlternateIncrementWeaponSelection))
         {
@@ -223,6 +283,7 @@ public class ShipController : MonoBehaviour {
             // TODO make this less horrible when i'm not tired  
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
+        */
     }
 
     public void giveGold(float amount) {
@@ -251,5 +312,23 @@ public class ShipController : MonoBehaviour {
 
         GameObject.Find("Wood").GetComponent<ResourcesDisplay>().ChangeAmount(Wood);
 	}
+
+    private void ActivateWeapon(int w)
+    {
+        if (activeWeapon == null && cooldownTimers[w] <= 0f)
+        {
+            activeWeapon = Instantiate(weapons[w], this.transform, false);
+        }
+    }
+
+    private void DeactivateWeapon(int w)
+    {
+        if (activeWeapon != null)
+        {
+            cooldownTimers[w] = activeWeapon.GetComponent<WeaponGroup>().cooldown;
+            activeWeapon.GetComponent<WeaponGroup>().Activate();
+            activeWeapon = null;
+        }
+    }
 
 }
