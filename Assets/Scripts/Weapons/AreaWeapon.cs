@@ -51,9 +51,12 @@ public class AreaWeapon : MonoBehaviour {
     // Have the weapon fire on all currently targeted game objects
     virtual public void Activate()
     {
-        foreach(GameObject g in targetedObj)
+        if (targetedObj.Count > 0)
         {
-            this.Attack(g); 
+            foreach (GameObject g in targetedObj)
+            {
+                this.Attack(g);
+            }
         }
 
         // now that our attack has been carried out, destroy this object 
