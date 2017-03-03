@@ -15,6 +15,7 @@ public class MortarTowerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GetComponent<Health>().OnDeath += Die;
+        coolDownTimer = Time.time + Random.Range(0, FireCooldown);
 	}
 
 	void FireProjectileIfPossible(){
