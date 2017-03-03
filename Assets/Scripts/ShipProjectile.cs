@@ -12,6 +12,7 @@ public class ShipProjectile : MonoBehaviour {
     /// How fast to move
     /// </summary>
     public float Speed = .01f;
+    private Vector3 defaultScale = new Vector3(3,3,1);
 
     private float EndTime;
 
@@ -36,10 +37,10 @@ public class ShipProjectile : MonoBehaviour {
     /// <param name="creator">Who's shooting</param>
     /// <param name="pos">Where to place the projectile</param>
     /// <param name="direction">Direction to move in (unit vector)</param>
-    public void Init(GameObject creator, Vector3 pos, Vector3 direction, float airTime = 15f)
+    public void Init(Vector3 pos, Vector3 direction, Vector3 scale, float airTime = 15f)
     {
-        Creator = creator;
         transform.position = pos;
+        transform.localScale = scale;
         GetComponent<Rigidbody2D>().velocity = direction.normalized * Speed;
         Invoke("Die", airTime);
     }

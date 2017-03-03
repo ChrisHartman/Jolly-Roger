@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 
 /// <summary>
 /// Implements player control of tanks, as well as collision detection.
@@ -36,7 +36,7 @@ public class ShipController : MonoBehaviour {
     /// <summary>
     /// Keyboard controls for the player.
     /// </summary>
-    public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey;
+    public KeyCode ForwardKey, AltForwardKey, LeftKey, AltLeftKey, RightKey, AltRightKey, BackKey, AltBackKey, SpeedUpKey, AlternateSpeedUpKey;
     private bool RaisedSail;
     private float ForwardForce;
     private float MaxSpeed;
@@ -47,31 +47,52 @@ public class ShipController : MonoBehaviour {
     /// Weapon controls and variables 
     /// </summary>
     public KeyCode FireKey = KeyCode.Space;
+    /*
     public KeyCode IncrementWeaponSelection = KeyCode.E;
     public KeyCode DecrementWeaponSelection = KeyCode.Q;
+    public KeyCode AlternateIncrementWeaponSelection;
+    public KeyCode AlternateDecrementWeaponSelection;
+    */
+    public KeyCode Hotkey1 = KeyCode.J;
+    public KeyCode Hotkey2 = KeyCode.K;
+    public KeyCode Hotkey3 = KeyCode.L;
+    private Image weaponIcon1, weaponIcon2, weaponIcon3; 
     public List<GameObject> weapons = new List<GameObject>();
     private GameObject activeWeapon;
     private int weaponIndex = 0;
     private float MoveTime;
-    private bool Incapacitated; 
+    private bool Incapacitated;
+    private List<float> cooldownTimers = new List<float>();
+
+    private float Gold;
+    private float Fabric;
+    private float Metal;
+    private float Wood;
 
     internal void Start() {
         MaxSpeed = MaxSlowSpeed;
         GetComponent<Health>().OnDeath += Die;
+        GetComponent<Health>().OnHit += GetComponent<AudioSource>().Play;
         Incapacitated = false;
-        MoveTime = 0;
         boatRb = GetComponent<Rigidbody2D>();
         cameraController = FindObjectOfType<CameraController>();
         ForwardForce = DefaultForce;
         RaisedSail = false; 
         NormalDrag = boatRb.drag;
-        GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
+
+        for (int i = 0; i < weapons.Count; i++)
+        {
+            cooldownTimers.Add(0f); 
+        }
+        weaponIcon1 = GameObject.Find("Weapon Icon 1").GetComponent<Image>();
+        weaponIcon2 = GameObject.Find("Weapon Icon 2").GetComponent<Image>();
+        weaponIcon3 = GameObject.Find("Weapon Icon 3").GetComponent<Image>(); 
     }
 
     public void RaiseSail() {
         ForwardForce = DefaultForce + ForceIncrease;
         if (activeWeapon != null) {
-                    activeWeapon.GetComponent<AreaWeapon>().Disable();
+                    activeWeapon.GetComponent<WeaponGroup>().Disable();
                     activeWeapon = null; 
         }
 
@@ -111,11 +132,10 @@ public class ShipController : MonoBehaviour {
     }
 
     void Die() {
-        Debug.Log("Dying!");
+        //Debug.Log("Dying!");
         Destroy(this.gameObject);
 
-        Debug.Log("Returning to main menu...");
-        GameObject.Find("Level Manager").GetComponent<LevelManager>().LoadLevel("Main Menu"); 
+        //Debug.Log("Returning to main menu...")
     }
     
     /// <summary>
@@ -127,15 +147,7 @@ public class ShipController : MonoBehaviour {
     {
         // This isn't implemented great, but the goal is to make it hitting an Island
         // hurt you, stop you, and allow you to leave
-        if (other.gameObject.tag == "Island") {
-            if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {
-                MaxSpeed = 0;
-                Incapacitated = true;
-                GetComponent<Health>().Damage(IslandDamage);
-                MoveTime = Time.time + IncapacitatedTime;
-                if (RaisedSail) LowerSail();
-            }
-        } else {
+        if (other.gameObject.tag == "Projectile") {
             GetComponent<Health>().Damage(5f);
         }
 
@@ -146,8 +158,30 @@ public class ShipController : MonoBehaviour {
         // GetComponent<Health>().Damage(damage);
     }
 
+    public void Crash(Collision2D other) {
+         if (other.relativeVelocity.magnitude > IslandCollisionVelocityThreshold && Time.time > MoveTime) {          
+            MaxSpeed = 0;
+            Incapacitated = true;
+            GetComponent<Health>().Damage(IslandDamage);
+            MoveTime = Time.time + IncapacitatedTime;
+            if (RaisedSail) LowerSail();
+         }
+    }
+
     internal void Update()
     {
+        // tick down cooldown timers
+        for (int i = 0; i < cooldownTimers.Count; i++)
+        {
+            cooldownTimers[i] -= Time.deltaTime;
+        }
+
+        // change weapon icon colors to reflect cooldowns 
+        // TODO: do this any other way jesus christ 
+        weaponIcon1.color = Color.Lerp(Color.white, Color.black, cooldownTimers[0] / weapons[0].GetComponent<WeaponGroup>().cooldown);
+        weaponIcon2.color = Color.Lerp(Color.white, Color.black, cooldownTimers[1] / weapons[1].GetComponent<WeaponGroup>().cooldown);
+        weaponIcon3.color = Color.Lerp(Color.white, Color.black, cooldownTimers[2] / weapons[2].GetComponent<WeaponGroup>().cooldown); 
+
         if (Incapacitated) {
             if (Time.time > MoveTime) {
                 Incapacitated = false;
@@ -162,14 +196,16 @@ public class ShipController : MonoBehaviour {
         } else if (Input.GetKeyUp(BackKey) || Input.GetKeyDown(AltBackKey)) {
             boatRb.drag = NormalDrag;
         }
-        if (Input.GetKeyDown(SpeedUpKey)) {
+        if (Input.GetKeyDown(SpeedUpKey) || Input.GetKeyDown(AlternateSpeedUpKey)) {
             RaiseSail();
-        } else if (!Input.GetKey(SpeedUpKey) && RaisedSail) {
+        } else if (!((Input.GetKey(SpeedUpKey) ||   Input.GetKey(AlternateSpeedUpKey))) && RaisedSail) {
             LowerSail();
         }
         // I'm doing this input in Update so that the frame the key is pressed isn't missed 
         if (!RaisedSail) {
 
+            // Weapons no longer based around usage of fire key
+            /*
             if (Input.GetKeyDown(FireKey))
             {
                     if (activeWeapon == null)
@@ -182,13 +218,45 @@ public class ShipController : MonoBehaviour {
             {
                 if (activeWeapon != null)
                 {
-                    activeWeapon.GetComponent<AreaWeapon>().Activate();
+                    activeWeapon.GetComponent<WeaponGroup>().Activate();
                     activeWeapon = null; 
                 }
             }
+            */
+
+            // TODO put the weapon codes into an enum, i just didn't because i'm lazy 
+            // Instead, player controls weapons using individual keys
+            // Firing Mortars NUM == 0
+            if (Input.GetKeyDown(Hotkey1))
+            {
+                ActivateWeapon(0); 
+            }
+            if (Input.GetKeyUp(Hotkey1))
+            {
+                DeactivateWeapon(0); 
+            }
+            // Firing Cannons NUM == 1
+            if (Input.GetKeyDown(Hotkey2))
+            {
+                ActivateWeapon(1); 
+            }
+            if (Input.GetKeyUp(Hotkey2))
+            {
+                DeactivateWeapon(1); 
+            }
+            // Dropping Fire Barrel NUM == 2
+            if (Input.GetKeyDown(Hotkey3))
+            {
+                ActivateWeapon(2); 
+            }
+            if (Input.GetKeyUp(Hotkey3))
+            {
+                DeactivateWeapon(2); 
+            }
         }
+        /*
         // change the selected weapon
-        if (Input.GetKeyDown(IncrementWeaponSelection))
+        if (Input.GetKeyDown(IncrementWeaponSelection) || Input.GetKeyDown(AlternateIncrementWeaponSelection))
         {
             weaponIndex++;
             // wrap around if the player scrolls past the largest index
@@ -200,7 +268,7 @@ public class ShipController : MonoBehaviour {
             // TODO make this less horrible when i'm not tired  
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name); 
         }
-        else if (Input.GetKeyDown(DecrementWeaponSelection))
+        else if (Input.GetKeyDown(DecrementWeaponSelection) || Input.GetKeyDown(AlternateDecrementWeaponSelection))
         {
             weaponIndex--;
             // wrap around if player scrolls past zero
@@ -212,6 +280,24 @@ public class ShipController : MonoBehaviour {
             // TODO make this less horrible when i'm not tired  
             GameObject.Find("Active Weapon Display").GetComponent<WeaponDisplay>().ChangeActiveWeapon(weapons[weaponIndex].name);
         }
+        */
     }
 
+    private void ActivateWeapon(int w)
+    {
+        if (activeWeapon == null && cooldownTimers[w] <= 0f)
+        {
+            activeWeapon = Instantiate(weapons[w], this.transform, false);
+        }
+    }
+
+    private void DeactivateWeapon(int w)
+    {
+        if (activeWeapon != null)
+        {
+            cooldownTimers[w] = activeWeapon.GetComponent<WeaponGroup>().cooldown;
+            activeWeapon.GetComponent<WeaponGroup>().Activate();
+            activeWeapon = null;
+        }
+    }
 }
