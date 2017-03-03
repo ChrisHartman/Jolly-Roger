@@ -21,7 +21,7 @@ public class MortarProjectile : MonoBehaviour {
 	private float explosionTime;
     private float startTime = 0;
     private bool exploding = false;
-    private List<Health> targetedHealth = new List<Health>();
+    public List<Health> targetedHealth = new List<Health>();
     private Color color;
 
     /// <summary>
@@ -58,7 +58,8 @@ public class MortarProjectile : MonoBehaviour {
             
             exploding = true;
             foreach (Health health in targetedHealth) {
-                health.Damage(10f);
+                if (health != null)
+                    health.Damage(10f);
             }
         } else if(Time.time > (explosionTime + explosionLength)){
             Destroy(gameObject);
@@ -77,6 +78,22 @@ public class MortarProjectile : MonoBehaviour {
             }
         }
     }
+
+    /// <summary>
+    /// OnTriggerStay is called once per frame for every Collider other
+    /// that is touching the trigger.
+    /// </summary>
+    /// <param name="other">The other Collider involved in this collision.</param>
+    void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<Health>() != null) {
+            if (!targetedHealth.Contains(other.GetComponent<Health>()))
+            {
+                targetedHealth.Add(other.GetComponent<Health>());
+            }
+        }
+    }
+
     /// <summary>
     /// Sent when another object leaves a trigger collider attached to
     /// this object (2D physics only).

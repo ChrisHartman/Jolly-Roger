@@ -19,7 +19,7 @@ public class Health : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		HealthRemaining = InitialHealth;
-		if (healthBarSlider != null) { // this might be a textbook example of how not to do this...
+		if (healthBarSlider != null) {
 			healthBarSlider.value = 1f;
 		}
 	}
@@ -35,11 +35,11 @@ public class Health : MonoBehaviour {
 	}
 
 	public void Damage(float damage) {
-		if (healthBarSlider != null) { // this might be a textbook example of how not to do this...
-			healthBarSlider.value = Mathf.Lerp(0, 1, HealthRemaining/InitialHealth);
-		}
 		HealthRemaining -= damage;
 		Debug.Log("Ouch, health now at " + HealthRemaining);
+		if (healthBarSlider != null) { // this might be a textbook example of how not to do this...
+			healthBarSlider.value = Mathf.Lerp(0f, 1f, HealthRemaining/InitialHealth);
+		}
 		OnHit();
 		if (HealthRemaining <= 0) {
 			// Debug.Log("oh no!");
