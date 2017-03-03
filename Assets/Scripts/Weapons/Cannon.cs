@@ -13,7 +13,7 @@ public class Cannon : AreaWeapon {
         // instead of using the attack method, this weapon instantiates a cannonball 
         GameObject ship = GameObject.Find("Ship");
         c.GetComponent<PlayerShipProjectile>().Init(ship.transform.position, 
-            transform.position - ship.transform.position, 2f);
+            transform.position - ship.transform.position, 2.5f);
         c.GetComponent<PlayerShipProjectile>().damage = power; 
     }
 }
