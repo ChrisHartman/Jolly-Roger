@@ -111,8 +111,12 @@ public class BasicAIShipController : MonoBehaviour {
 	void PathingInit() {
 		////Debug.Log("switching to pathing");
 		currentPath = Waypoint.FindPath(this.transform.position, ship.transform.position);
-		CurrentWaypoint = 0;
-		state = State.pathing;
+		if (currentPath == null) {
+			PatrollingInit();
+		} else {
+			CurrentWaypoint = 0;
+			state = State.pathing;
+		}
 	}
 
 	void PathingUpdate() {

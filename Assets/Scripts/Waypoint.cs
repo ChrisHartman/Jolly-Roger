@@ -92,7 +92,8 @@ public class Waypoint : MonoBehaviour
     /// <returns></returns>
     public static List<Waypoint> FindPath(Vector2 start, Vector2 end)
     {
-        return FindPath(NearestWaypointTo(start), NearestWaypointTo(end));
+        List<Waypoint> wp =  FindPath(NearestWaypointTo(start), NearestWaypointTo(end));
+        return wp;
     }
 
 
@@ -101,6 +102,9 @@ public class Waypoint : MonoBehaviour
     /// <returns></returns>
     static List<Waypoint> FindPath(Waypoint start, Waypoint end)
     {
+        if (!start || !end) {
+            return null;
+        }
         // Do a BFS of the graph
         PriorityQueue q = new PriorityQueue(start.transform.position, end.transform.position);
         foreach (var wp in AllWaypoints)
