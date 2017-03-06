@@ -9,6 +9,8 @@ public class MortarTowerController : MonoBehaviour {
 	    
 	private float coolDownTimer;
 
+    private GameObject ship;
+
     public GameObject MortarProjectile;
 	//public GameObject ShipController;
 
@@ -16,12 +18,10 @@ public class MortarTowerController : MonoBehaviour {
 	void Start () {
 		GetComponent<Health>().OnDeath += Die;
         coolDownTimer = Time.time + Random.Range(0, FireCooldown);
+        ship= GameObject.Find("Ship");
 	}
 
 	void FireProjectileIfPossible(){
-
-		var ship= GameObject.Find("Ship");
-
         float dist = Vector3.Distance(ship.transform.position,transform.position);
         if (Time.time > coolDownTimer && dist < FireDistance) {
 

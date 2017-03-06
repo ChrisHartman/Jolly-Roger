@@ -9,19 +9,17 @@ public class fireTowerController : MonoBehaviour {
     public float FireDistance = 1.5f;
 
 	private float coolDownTimer;
+    private GameObject ship;
 
 	// Use this for initialization
 	void Start () {
+        ship= GameObject.Find("Ship");
 		GetComponent<Health>().OnDeath += Die;
 	}
 
 	void FireProjectileIfPossible(){
-
-		var ship= GameObject.Find("Ship");
-
         float dist = Vector3.Distance(ship.transform.position,transform.position);
         if (Time.time > coolDownTimer && dist < 4f) {
-
             FireProjectile();
 			coolDownTimer = Time.time + FireCooldown;
         }

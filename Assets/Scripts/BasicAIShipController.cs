@@ -66,7 +66,7 @@ public class BasicAIShipController : MonoBehaviour {
 			case State.chasing:
 				ChasingUpdate();
 				if (!shipVisible) {
-					PathingInit();
+					PatrollingInit();
 				} else if (shipFar) {
 					PatrollingInit();
 				}

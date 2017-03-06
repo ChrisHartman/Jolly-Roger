@@ -67,8 +67,8 @@ public class AreaWeapon : MonoBehaviour {
     // Code that defines how an attack is carried out 
     private void Attack(GameObject other)
     {
-        Debug.Log("Attacking " + other.name + " with " + this.gameObject.name); 
-        if (other.GetComponent<Health>() != null) {
+        if (other != null && other.GetComponent<Health>() != null) {
+            Debug.Log("Attacking " + other.name + " with " + this.gameObject.name); 
             other.GetComponent<Health>().Damage(power);
 
             // create a smaller explosion at the target site

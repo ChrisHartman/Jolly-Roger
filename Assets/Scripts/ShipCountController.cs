@@ -1,27 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
-public class ScoreController : MonoBehaviour {
+public class ShipCountController : MonoBehaviour {
+
 	Text scoreText;
 	int score;
 	// Use this for initialization
 	void Start () {
 		scoreText = GetComponent<Text>();
 		Health[] healths = FindObjectsOfType<Health>();
-		score = healths.Length;
-		scoreText.text = "Enemies Left: " + score;
+		score = 0;
 		foreach (Health health in FindObjectsOfType<Health>()) {
 			if (health.GetComponent<ShipController>() == null &&
-				health.GetComponent<IslandController>() == null) {
+				health.GetComponent<BasicAIShipController>() != null) {
 				health.OnDeath += DecrementEnemyCount;
+				score++;
 			}
 		}
+		scoreText.text = "Ships Left: " + score;
 	}
 	void DecrementEnemyCount() {
 		score--;
-		scoreText.text = "Enemies Left: " + score;
+		scoreText.text = "Ships Left: " + score;
 	}
 	
 }

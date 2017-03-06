@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class StoreController : MonoBehaviour {
 
 	// Use this for initialization
+	public Text words;
 	Hashtable ButtonsToUpgrades = new Hashtable();
 	private Text resourceDisplay;
 	void Start () {
@@ -16,8 +17,8 @@ public class StoreController : MonoBehaviour {
 		int upgradeCount = 0;
 		foreach (Button button in GetComponentsInChildren<Button>()) {
 			if (upgradeCount >= upgrades.Count ||
-				!SufficientFunds(upgrades[upgradeCount])) {
-					Destroy(button.gameObject);
+			(!SufficientFunds(upgrades[upgradeCount]))) {
+				Destroy(button.gameObject);
 			} else {
 				button.GetComponentInChildren<Text>().text = upgrades[upgradeCount].UpgradeName 
 															 + "\nCosts " + upgrades[upgradeCount].GoldCost + " Gold, "
@@ -29,6 +30,11 @@ public class StoreController : MonoBehaviour {
 				button.onClick.AddListener(UpdateDisplay);
 				ButtonsToUpgrades.Add(button, upgrades[upgradeCount]);
 				upgradeCount++;
+			}
+			if (upgradeCount == 0) {
+				words.text = "No Upgrades Available";
+			} else {
+				words.text = "";
 			}
 		}
 	}
