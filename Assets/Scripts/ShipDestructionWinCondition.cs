@@ -10,10 +10,11 @@ public class ShipDestructionWinCondition : MonoBehaviour {
 	public Text Instructions;
 	public float InstructionsFadeTime = .5f;
 	public float InstructionSolidTime = 1f;
+	public string type = "Zombie";
 	private float StartTime;
 	private Color InstructionColor;
 	void Start () {
-		Instructions.text = "Destroy All Zombie Ships!";
+		Instructions.text = "Destroy All " + type + " Ships!";
 		InstructionColor = Instructions.color;
 		EnemyCount = 0;
 		StartTime = Time.time + InstructionSolidTime;
@@ -27,10 +28,9 @@ public class ShipDestructionWinCondition : MonoBehaviour {
 	}
 
 	void Update() {
-		InstructionColor.a = Mathf.Lerp(1,0, (Time.time - StartTime) / InstructionsFadeTime);
-		Instructions.color = InstructionColor;
-		if ((Time.time - StartTime) / InstructionsFadeTime > 1) {
-			Destroy(Instructions);
+		if ((Time.time - StartTime) / InstructionsFadeTime < 2) {
+			InstructionColor.a = Mathf.Lerp(1,0, (Time.time - StartTime) / InstructionsFadeTime);
+			Instructions.color = InstructionColor;
 		}
 	}
 	
