@@ -10,7 +10,7 @@ Welcome to Jolly Roger!
 
 A 2-D pirate adventure testing your abilities commandeer a vessel and captain your crew to untold riches.
 
-Controls:
+### Controls
 
 To move use **WASD** keys
 
@@ -24,7 +24,7 @@ To drop a fire barrel for your foes to run into press **L**
 
 To destroy an entire island, defeat all towers and reap the bigger rewards.
 
-Levels:
+### Levels
 
 Tutorial/Practice: A level to get your sea legs and practice on simple towers and enemy ships
 
