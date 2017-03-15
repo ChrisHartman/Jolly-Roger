@@ -2,7 +2,10 @@
 
 This is the final unity project for the team Wubbalubbadubdub for the class EECS 395 - Game Development Studio, at Northwestern University.
 
-## Instructions
+
+![Gameplay Screenshot](/Screenshots/screnshot1.png?raw=true)
+
+##Instructions
 
 **Argggggg!**
 
