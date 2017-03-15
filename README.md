@@ -4,7 +4,7 @@ This is the final unity project for the team Wubbalubbadubdub for the class EECS
 
 ## Instructions
 
-*Argggggg!*
+**Argggggg!**
 
 Welcome to Jolly Roger! 
 
@@ -12,15 +12,15 @@ A 2-D pirate adventure testing your abilities commandeer a vessel and captain yo
 
 Controls:
 
-To move use *WASD* keys
+To move use **WASD** keys
 
-To raise your sails and get a better view of your surroundings use *SPACE* or *LEFT SHIFT* (you cannot fire weapons in fast mode)
+To raise your sails and get a better view of your surroundings use **SPACE** or **LEFT SHIFT** (you cannot fire weapons in fast mode)
 
-To aim mortars press *J* and release to fire
+To aim mortars press **J** and release to fire
 
-To aim cannonballs press *K* and release to fire
+To aim cannonballs press **K** and release to fire
 
-To drop a fire barrel for your foes to run into press *L*
+To drop a fire barrel for your foes to run into press **L**
 
 To destroy an entire island, defeat all towers and reap the bigger rewards.
 
