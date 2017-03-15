@@ -18,7 +18,15 @@ public class Health : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		for (int i=1; i<4; i++) {
+			if ((PlayerPrefs.GetInt("Upgrade Health"+i) == 1)) {
+				InitialHealth+=10;
+			}
+		}
 		HealthRemaining = InitialHealth;
+		if (GetComponent<ShipController>()!=null) {
+
+		}
 		if (healthBarSlider != null) {
 			healthBarSlider.value = 1f;
 		}

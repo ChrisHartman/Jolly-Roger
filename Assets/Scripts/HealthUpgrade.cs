@@ -19,8 +19,7 @@ public class HealthUpgrade : UpgradeController {
 		
 	}
 	override public void ApplyUpgrade() {
-		ShipController ship = FindObjectOfType<ShipController>();
-		ship.GetComponent<Health>().HealthOverride(ship.GetComponent<Health>().HealthRemaining + 10);
+
 	}
 	
 	// Update is called once per frame
